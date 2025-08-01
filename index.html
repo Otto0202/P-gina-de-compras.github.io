@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-4 text-center">Carrito de Compras</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold">Ballena</h2>
+        <select id="colorBallena" class="border p-2 w-full mt-2">
+          <option value="10000">Rojo</option>
+          <option value="10000">Azul</option>
+          <option value="10000">Verde</option>
+        </select>
+        <p class="mt-2 font-bold">$10.000</p>
+        <button class="bg-green-500 text-white px-4 py-2 mt-2 rounded"
+          onclick="addToCart('Ballena', 10000, document.getElementById('colorBallena').options[document.getElementById('colorBallena').selectedIndex].text)">
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="text-2xl font-bold mb-4">Carrito</h2>
+      <div id="cart"><p>No hay productos en el carrito.</p></div>
+      <button onclick="checkout()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">Pagar por WhatsApp</button>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
