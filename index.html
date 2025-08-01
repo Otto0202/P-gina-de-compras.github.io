@@ -23,7 +23,8 @@
 
     <!-- Productos -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <!-- Producto: Ballena con colores -->
+
+      <!-- Producto con selección de color: Ballena -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/CBsm2tM.jpg" alt="Ballena" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Ballena</h2>
@@ -46,10 +47,10 @@
           <option value="10000">Marrón oscuro</option>
           <option value="10000">Marrón claro</option>
         </select>
-        <button onclick="addToCart('Ballena', parseInt(document.getElementById('colorBallena').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <button onclick="addToCart('Ballena', parseInt(document.getElementById('colorBallena').value), document.getElementById('colorBallena').options[document.getElementById('colorBallena').selectedIndex].text)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
 
-      <!-- Producto: Pulpo con colores -->
+      <!-- Producto con selección de color: Pulpo -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/JaS7BSI.jpg" alt="Pulpo" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Pulpo</h2>
@@ -72,10 +73,10 @@
           <option value="10000">Marrón oscuro</option>
           <option value="10000">Marrón claro</option>
         </select>
-        <button onclick="addToCart('Pulpo', parseInt(document.getElementById('colorPulpo').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <button onclick="addToCart('Pulpo', parseInt(document.getElementById('colorPulpo').value), document.getElementById('colorPulpo').options[document.getElementById('colorPulpo').selectedIndex].text)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
 
-      <!-- Producto: Gallina con colores -->
+      <!-- Producto con selección de color: Gallina -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/greMULg.jpg" alt="Gallina" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Gallina</h2>
@@ -89,8 +90,11 @@
           <option value="10000">Gris</option>
           <option value="12000">Especial</option>
         </select>
-        <button onclick="addToCart('Gallina', parseInt(document.getElementById('colorGallina').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <button onclick="addToCart('Gallina', parseInt(document.getElementById('colorGallina').value), document.getElementById('colorGallina').options[document.getElementById('colorGallina').selectedIndex].text)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
+
+      <!-- Aquí irían los demás productos SIN colores -->
+
     </div>
 
     <!-- Carrito -->
