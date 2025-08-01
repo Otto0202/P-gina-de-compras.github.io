@@ -63,9 +63,15 @@ function checkout() {
   }
 
   let message = "Hola, quiero comprar:\n";
+  let total = 0;
+
   cart.forEach(item => {
-    message += `- ${item.productName} x${item.quantity} ($${item.price} c/u)\n`;
+    const subtotal = item.quantity * item.price;
+    total += subtotal;
+    message += `- ${item.productName} x${item.quantity} ($${item.price} c/u) = $${subtotal}\n`;
   });
+
+  message += `\nTotal de la compra: $${total}`;
 
   const encodedMessage = encodeURIComponent(message);
   window.open(`https://wa.me/573008140612?text=${encodedMessage}`, '_blank');
