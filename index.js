@@ -29,5 +29,5 @@ function checkout() {
     message += `- ${item.productName} ($${item.price})\n`;
   });
   const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/573001112233?text=${encodedMessage}`, '_blank');
+  window.open(`https://wa.me/573008140612?text=${encodedMessage}`, '_blank');
 }
