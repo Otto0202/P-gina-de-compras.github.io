@@ -1,59 +1,103 @@
-
 let cart = [];
 
-function addToCart(productName, price) {
-  const existingProduct = cart.find(item => item.productName === productName);
-  if (existingProduct) {
-    existingProduct.quantity += 1;
-  } else {
-    cart.push({ productName, price, quantity: 1 });
-  }
-  updateCart();
-}
+function addToCart(productName, price, color = null) {
+  let product = cart.find(item => item.name === productName);
 
-function removeFromCart(productName) {
-  const index = cart.findIndex(item => item.productName === productName);
-  if (index !== -1) {
-    if (cart[index].quantity > 1) {
-      cart[index].quantity -= 1;
-    } else {
-      cart.splice(index, 1);
-    }
+  if (!product) {
+    product = { name: productName, price, colors: {} };
+    cart.push(product);
   }
+
+  if (color) {
+    if (!product.colors[color]) product.colors[color] = 1;
+    else product.colors[color] += 1;
+  } else {
+    if (!product.colors["Único"]) product.colors["Único"] = 1;
+    else product.colors["Único"] += 1;
+  }
+
   updateCart();
 }
 
 function updateCart() {
-  const cartContainer = document.getElementById('cart');
-  cartContainer.innerHTML = '';
-  
+  const cartDiv = document.getElementById("cart");
+  cartDiv.innerHTML = "";
+
   if (cart.length === 0) {
-    cartContainer.innerHTML = '<p>No hay productos en el carrito.</p>';
+    cartDiv.innerHTML = "<p>No hay productos en el carrito.</p>";
     return;
   }
 
   let total = 0;
-  cart.forEach((item) => {
-    const subtotal = item.price * item.quantity;
+
+  cart.forEach((item, productIndex) => {
+    let productContainer = document.createElement("div");
+    productContainer.className = "mb-4 p-2 border-b";
+
+    let productTitle = document.createElement("p");
+    productTitle.className = "font-bold";
+    productTitle.textContent = item.name;
+    productContainer.appendChild(productTitle);
+
+    Object.entries(item.colors).forEach(([color, qty]) => {
+      let colorDiv = document.createElement("div");
+      colorDiv.className = "flex justify-between items-center ml-4 gap-2";
+
+      let colorText = document.createElement("span");
+      colorText.textContent = `(${color} x ${qty})`;
+
+      let colorPrice = document.createElement("span");
+      colorPrice.textContent = `$${qty * item.price}`;
+
+      let addButton = document.createElement("button");
+      addButton.className = "bg-green-500 text-white px-2 py-1 rounded";
+      addButton.textContent = "+";
+      addButton.onclick = () => addColorQuantity(productIndex, color);
+
+      let removeButton = document.createElement("button");
+      removeButton.className = "bg-red-500 text-white px-2 py-1 rounded";
+      removeButton.textContent = "-";
+      removeButton.onclick = () => removeColorFromCart(productIndex, color);
+
+      colorDiv.appendChild(colorText);
+      colorDiv.appendChild(colorPrice);
+      colorDiv.appendChild(addButton);
+      colorDiv.appendChild(removeButton);
+
+      productContainer.appendChild(colorDiv);
+    });
+
+    let subtotal = Object.values(item.colors).reduce((acc, qty) => acc + qty * item.price, 0);
     total += subtotal;
-    cartContainer.innerHTML += `
-      <div class='flex justify-between items-center mb-2'>
-        <div>
-          <span>${item.productName} x${item.quantity}</span>
-          <span class="block text-sm text-gray-500">$${item.price} c/u</span>
-        </div>
-        <div class="flex items-center space-x-2">
-          <span class="font-semibold">$${subtotal}</span>
-          <button onclick="removeFromCart('${item.productName}')" class="bg-red-500 text-white px-2 py-1 rounded text-sm">Eliminar</button>
-        </div>
-      </div>`;
+
+    cartDiv.appendChild(productContainer);
   });
 
-  cartContainer.innerHTML += `
-    <div class='flex justify-between font-bold border-t pt-2 mt-2'>
-      <span>Total:</span>
-      <span>$${total}</span>
-    </div>`;
+  const totalDiv = document.createElement("div");
+  totalDiv.className = "font-bold mt-4";
+  totalDiv.textContent = `Total: $${total}`;
+  cartDiv.appendChild(totalDiv);
+}
+
+function addColorQuantity(productIndex, color) {
+  cart[productIndex].colors[color] += 1;
+  updateCart();
+}
+
+function removeColorFromCart(productIndex, color) {
+  let product = cart[productIndex];
+
+  if (product.colors[color] > 1) {
+    product.colors[color] -= 1;
+  } else {
+    delete product.colors[color];
+  }
+
+  if (Object.keys(product.colors).length === 0) {
+    cart.splice(productIndex, 1);
+  }
+
+  updateCart();
 }
 
 function checkout() {
@@ -66,13 +110,15 @@ function checkout() {
   let total = 0;
 
   cart.forEach(item => {
-    const subtotal = item.quantity * item.price;
+    let colorsText = Object.entries(item.colors)
+      .map(([color, qty]) => `(${color} x ${qty})`)
+      .join(" ");
+    let subtotal = Object.values(item.colors).reduce((acc, qty) => acc + qty * item.price, 0);
     total += subtotal;
-    message += `- ${item.productName} x${item.quantity} ($${item.price} c/u) = $${subtotal}\n`;
+    message += `- ${item.name} ${colorsText}\n`;
   });
 
   message += `\nTotal de la compra: $${total}`;
-
   const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/573008140612?text=${encodedMessage}`, '_blank');
+  window.open(`https://wa.me/573008140612?text=${encodedMessage}`, "_blank");
 }
