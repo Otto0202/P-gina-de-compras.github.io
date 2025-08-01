@@ -6,8 +6,15 @@
   <title>Made by Jeammy</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
+  <style>
+    body {
+      background-image: url('https://www.transparenttextures.com/patterns/white-wall-3.png');
+      background-color: rgba(255, 255, 255, 0.8);
+      background-blend-mode: lighten;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="bg-gray-100 bg-opacity-90 p-6">
   <div class="max-w-6xl mx-auto">
     <div class="flex items-center justify-center mb-6">
       <img src="https://imgur.com/KYK1aNe.jpg" class="w-32 h-32 logo-img">
@@ -16,100 +23,81 @@
 
     <!-- Productos -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <!-- Producto 1: Pollito -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/sctJvmR.jpg" alt="Pollito" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Pollito</h2>
-        <p class="text-gray-600">Llavero hecho a mano con hilo 100% algodón.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Pollito', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-
-      <!-- Producto 2: Ballena -->
+      <!-- Producto: Ballena con colores -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/CBsm2tM.jpg" alt="Ballena" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Ballena</h2>
         <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Ballena', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <label for="colorBallena" class="block mt-2 text-sm font-medium text-gray-700">Color:</label>
+        <select id="colorBallena" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+          <option value="10000">Rojo</option>
+          <option value="10000">Amarillo</option>
+          <option value="10000">Verde oscuro</option>
+          <option value="10000">Verde claro</option>
+          <option value="10000">Rosado</option>
+          <option value="10000">Azul oscuro</option>
+          <option value="10000">Morado</option>
+          <option value="10000">Azul claro</option>
+          <option value="10000">Naranja</option>
+          <option value="10000">Gris</option>
+          <option value="10000">Negro</option>
+          <option value="12000">Especial</option>
+          <option value="10000">Blanco</option>
+          <option value="10000">Marrón oscuro</option>
+          <option value="10000">Marrón claro</option>
+        </select>
+        <button onclick="addToCart('Ballena', parseInt(document.getElementById('colorBallena').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
 
-       <!-- Producto 2: Cereza -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/lbY2JVg.jpg" alt="Cereza" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Cereza</h2>
-        <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Cereza', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-
-    <!-- Producto 2: Zanahoria -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/LAhe7dL.jpg" alt="Zanahoria" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Zanahoria</h2>
-        <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Zanahoria', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-
-    <!-- Producto 2: Fantasma -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/gLSPyVn.jpg" alt="Fantasma" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Fantasma</h2>
-        <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Fantasma', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-
-<!-- Producto 2: Polluelo -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/RrEQMSy.jpg" alt="Polluelo" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Polluelo</h2>
-        <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$7.000</p>
-        <button onclick="addToCart('Polluelo', 7000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-
-       <!-- Producto 2: Pulpo -->
+      <!-- Producto: Pulpo con colores -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/JaS7BSI.jpg" alt="Pulpo" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Pulpo</h2>
         <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Pulpo', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-      
-      <!-- Producto 2: Abejita -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/lvuyLl9.jpg" alt="Abejita" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Abejita</h2>
-        <p class="text-gray-600">Colorido llavero hecho a mano.</p>
-        <p class="text-lg font-bold mt-2">$7.000</p>
-        <button onclick="addToCart('Abejita', 7000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-      
-      <!-- Producto 3: Capibara -->
-      <div class="bg-white p-4 rounded shadow">
-        <img src="https://imgur.com/wI98VVk.jpg" alt="Capibara" class="w-full h-55 object-cover mb-4">
-        <h2 class="text-xl font-semibold">Capibara</h2>
-        <p class="text-gray-600">Llavero hecho a mano con hilo 100% algodón.</p>
-        <p class="text-lg font-bold mt-2">$12.000</p>
-        <button onclick="addToCart('Capibara', 12000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <label for="colorPulpo" class="block mt-2 text-sm font-medium text-gray-700">Color:</label>
+        <select id="colorPulpo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+          <option value="10000">Rojo</option>
+          <option value="10000">Amarillo</option>
+          <option value="10000">Verde oscuro</option>
+          <option value="10000">Verde claro</option>
+          <option value="10000">Rosado</option>
+          <option value="10000">Azul oscuro</option>
+          <option value="10000">Morado</option>
+          <option value="10000">Azul claro</option>
+          <option value="10000">Naranja</option>
+          <option value="10000">Gris</option>
+          <option value="10000">Negro</option>
+          <option value="12000">Especial</option>
+          <option value="10000">Blanco</option>
+          <option value="10000">Marrón oscuro</option>
+          <option value="10000">Marrón claro</option>
+        </select>
+        <button onclick="addToCart('Pulpo', parseInt(document.getElementById('colorPulpo').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
 
-      <!-- Producto 4: Gallina -->
+      <!-- Producto: Gallina con colores -->
       <div class="bg-white p-4 rounded shadow">
         <img src="https://imgur.com/greMULg.jpg" alt="Gallina" class="w-full h-55 object-cover mb-4">
         <h2 class="text-xl font-semibold">Gallina</h2>
         <p class="text-gray-600">Llavero hecho a mano con hilo 100% algodón.</p>
-        <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Gallina', 10000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+        <label for="colorGallina" class="block mt-2 text-sm font-medium text-gray-700">Color:</label>
+        <select id="colorGallina" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+          <option value="10000">Blanco</option>
+          <option value="10000">Marrón oscuro</option>
+          <option value="10000">Marrón claro</option>
+          <option value="10000">Negro</option>
+          <option value="10000">Gris</option>
+          <option value="12000">Especial</option>
+        </select>
+        <button onclick="addToCart('Gallina', parseInt(document.getElementById('colorGallina').value))" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
     </div>
 
     <!-- Carrito -->
     <div class="bg-white p-6 rounded shadow">
-      <h2 class="text-2xl font-bold mb-4">Carrito de Compras</h2>
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Carrito" class="w-6 h-6"> Carrito de Compras
+      </h2>
       <div id="cart" class="mb-4 text-gray-700">
         <p>No hay productos en el carrito.</p>
       </div>
