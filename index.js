@@ -121,5 +121,5 @@ function checkout() {
 
   message += `\nTotal de la compra: $${total}`;
   const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/573008140612?text=${encodedMessage}`, "_blank");
+  window.open(`https://wa.me/573014354201?text=${encodedMessage}`, "_blank");
 }
