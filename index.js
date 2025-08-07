@@ -1,5 +1,16 @@
 
 let cart = [];
+let selectedSeller = null;
+
+function selectSeller(name) {
+  selectedSeller = name;
+  document.getElementById('welcomeModal').style.display = 'none';
+  document.getElementById('alertModal').classList.remove('hidden');
+}
+
+function closeAlertModal() {
+  document.getElementById('alertModal').style.display = 'none';
+}
 
 function addToCart(productName, price, color = null) {
   let product = cart.find(item => item.name === productName);
@@ -107,6 +118,11 @@ function checkout() {
     return;
   }
 
+  if (!selectedSeller) {
+    alert("Por favor selecciona de parte de quién vienes primero.");
+    return;
+  }
+
   let message = "Hola, quiero comprar:\n";
   let total = 0;
 
@@ -121,5 +137,10 @@ function checkout() {
 
   message += `\nTotal de la compra: $${total}`;
   const encodedMessage = encodeURIComponent(message);
-  window.open(`https://wa.me/573014354201?text=${encodedMessage}`, "_blank");
+
+  let phoneNumber = selectedSeller === 'Jeammy'
+    ? '573014354201'
+    : '573123456789'; // Reemplaza este número por el real de Anderson
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
