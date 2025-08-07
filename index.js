@@ -139,8 +139,8 @@ function checkout() {
   const encodedMessage = encodeURIComponent(message);
 
   let phoneNumber = selectedSeller === 'Jeammy'
-    ? '573014354201'
-    : '573123456789'; // Reemplaza este número por el real de Anderson
+    ? '573008140612'
+    : '573014354201'; // Reemplaza este número por el real de Anderson
 
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
