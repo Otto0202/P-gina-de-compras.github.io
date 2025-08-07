@@ -1,3 +1,14 @@
+let selectedSeller = null;
+
+function selectSeller(name) {
+  selectedSeller = name;
+  document.getElementById('welcomeModal').style.display = 'none';
+  document.getElementById('alertModal').classList.remove('hidden');
+}
+
+function closeAlertModal() {
+  document.getElementById('alertModal').style.display = 'none';
+}
 
 let cart = [];
 
@@ -101,9 +112,14 @@ function removeColorFromCart(productIndex, color) {
   updateCart();
 }
 
-function checkout() {
+ffunction checkout() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío.");
+    return;
+  }
+
+  if (!selectedSeller) {
+    alert("Por favor selecciona de parte de quién vienes primero.");
     return;
   }
 
@@ -118,6 +134,16 @@ function checkout() {
     total += subtotal;
     message += `- ${item.name} ${colorsText}\n`;
   });
+
+  message += `\nTotal de la compra: $${total}`;
+  const encodedMessage = encodeURIComponent(message);
+
+  let phoneNumber = selectedSeller === 'Jeammy'
+    ? '573008140612' // Número de Jeammy
+    : '573014354201'; // Reemplaza con el número de Anderson
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+}
 
   message += `\nTotal de la compra: $${total}`;
   const encodedMessage = encodeURIComponent(message);
