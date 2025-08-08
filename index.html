@@ -192,19 +192,13 @@
       
       <!-- Producto 3: Capibara -->
       <div class="bg-white p-4 rounded shadow">
-    <div class="mb-4">
-    <!-- Imagen principal -->
-    <img id="mainImageCapibara" src="https://imgur.com/wI98VVk.jpg" alt="Capibara" class="w-full h-55 object-cover mb-2">
+ 
 
-    <!-- Miniaturas -->
-    <div class="flex space-x-2">
-      <img src="https://imgur.com/wI98VVk.jpg" class="w-16 h-16 object-cover cursor-pointer" onclick="document.getElementById('mainImageCapibara').src=this.src">
-      <img src="https://imgur.com/m1pJ7Pk.jpg" class="w-16 h-16 object-cover cursor-pointer" onclick="document.getElementById('mainImageCapibara').src=this.src">
-      <img src="https://imgur.com/SRTpOKs.jpg" class="w-16 h-16 object-cover cursor-pointer" onclick="document.getElementById('mainImageCapibara').src=this.src">
-      <img src="https://imgur.com/xK9zprV.jpg" class="w-16 h-16 object-cover cursor-pointer" onclick="document.getElementById('mainImageCapibara').src=this.src">
-      <img src="https://imgur.com/0FTSdhQ.jpg" class="w-16 h-16 object-cover cursor-pointer" onclick="document.getElementById('mainImageCapibara').src=this.src">
-    </div>
-  </div>
+    <div class="relative mb-4">
+  <img id="mainImageCapibara" src="https://imgur.com/wI98VVk.jpg" alt="Capibara" class="w-full h-64 object-cover mb-2 rounded">
+  <button onclick="prevImageCapibara()" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-700 text-white px-2 rounded">&#10094;</button>
+  <button onclick="nextImageCapibara()" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-700 text-white px-2 rounded">&#10095;</button>
+</div>
         <h2 class="text-xl font-semibold">Capibara</h2>
         <p class="text-gray-600">Llavero hecho a mano con hilo 100% algodón.</p>
         <p class="text-lg font-bold mt-2">$15.000</p>
