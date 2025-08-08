@@ -144,3 +144,29 @@ function checkout() {
 
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
+// ==== IMÁGENES CON FLECHAS PARA CAPIBARA ====
+
+const capibaraImages = [
+  "https://imgur.com/wI98VVk.jpg",
+  "https://imgur.com/m1pJ7Pk.jpg",
+  "https://imgur.com/SRTpOKs.jpg",
+  "https://imgur.com/xK9zprV.jpg",
+  "https://imgur.com/0FTSdhQ.jpg"
+];
+
+let currentCapibaraIndex = 0;
+
+function updateCapibaraImage() {
+  const imgElement = document.getElementById("mainImageCapibara");
+  imgElement.src = capibaraImages[currentCapibaraIndex];
+}
+
+function nextImageCapibara() {
+  currentCapibaraIndex = (currentCapibaraIndex + 1) % capibaraImages.length;
+  updateCapibaraImage();
+}
+
+function prevImageCapibara() {
+  currentCapibaraIndex = (currentCapibaraIndex - 1 + capibaraImages.length) % capibaraImages.length;
+  updateCapibaraImage();
+}
