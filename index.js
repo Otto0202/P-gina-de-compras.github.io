@@ -175,6 +175,7 @@ function prevImageCapibara() {
 // ==== IMÁGENES CON FLECHAS PARA Marcapáginas ====
 
 const MarcapáginasImages = [
+  "https://imgur.com/8zEzIUq.jpg",
   "https://imgur.com/GPO6OmJ.jpg",
   
 ];
