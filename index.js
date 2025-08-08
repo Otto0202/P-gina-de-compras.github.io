@@ -170,3 +170,28 @@ function prevImageCapibara() {
   currentCapibaraIndex = (currentCapibaraIndex - 1 + capibaraImages.length) % capibaraImages.length;
   updateCapibaraImage();
 }
+
+
+// ==== IMÁGENES CON FLECHAS PARA Marcapáginas ====
+
+const MarcapáginasImages = [
+  "https://imgur.com/GPO6OmJ.jpg",
+  
+];
+
+let currentMarcapáginasIndex = 0;
+
+function updateMarcapáginasImage() {
+  const imgElement = document.getElementById("mainImageMarcapáginas");
+  imgElement.src = MarcapáginasImages[currentMarcapáginasIndex];
+}
+
+function nextImageMarcapáginas() {
+  currentMarcapáginasIndex = (currentMarcapáginasIndex + 1) % MarcapáginasImages.length;
+  updateMarcapáginasImage();
+}
+
+function prevImageMarcapáginas() {
+  currentMarcapáginasIndex = (currentMarcapáginasIndex - 1 + MarcapáginasImages.length) % MarcapáginasImages.length;
+  updateMarcapáginasImage();
+}
