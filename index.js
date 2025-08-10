@@ -246,3 +246,27 @@ function prevImageGatoZombie() {
   currentGatoZombieIndex = (currentGatoZombieIndex - 1 + GatoZombieImages.length) % GatoZombieImages.length;
   updateGatoZombieImage();
 }
+// ==== IMÁGENES CON FLECHAS PARA SeñorPool ====
+
+const SeñorPoolImages = [
+  "https://imgur.com/4o5TPuG.jpg",
+  "https://imgur.com/Ik3zxaw.jpg",
+  
+];
+
+let currentSeñorPoolIndex = 0;
+
+function updateSeñorPoolImage() {
+  const imgElement = document.getElementById("mainImageSeñorPool");
+  imgElement.src = SeñorPoolImages[currentSeñorPoolIndex];
+}
+
+function nextImageSeñorPool() {
+  currentSeñorPoolIndex = (currentSeñorPoolIndex + 1) % SeñorPoolImages.length;
+  updateSeñorPoolImage();
+}
+
+function prevImageSeñorPool() {
+  currentSeñorPoolIndex = (currentSeñorPoolIndex - 1 + SeñorPoolImages.length) % SeñorPoolImages.length;
+  updateSeñorPoolImage();
+}
