@@ -221,3 +221,28 @@ function prevImageDeadpool() {
   currentDeadpoolIndex = (currentDeadpoolIndex - 1 + DeadpoolImages.length) % DeadpoolImages.length;
   updateDeadpoolImage();
 }
+
+// ==== IMÁGENES CON FLECHAS PARA GatoZombie ====
+
+const GatoZombieImages = [
+  "https://imgur.com/ZXbVuZz.jpg",
+  "https://imgur.com/XLz1OaD.jpg",
+  
+];
+
+let currentGatoZombieIndex = 0;
+
+function updateGatoZombieImage() {
+  const imgElement = document.getElementById("mainImageGatoZombie");
+  imgElement.src = GatoZombieImages[currentGatoZombieIndex];
+}
+
+function nextImageGatoZombie() {
+  currentGatoZombieIndex = (currentGatoZombieIndex + 1) % GatoZombieImages.length;
+  updateGatoZombieImage();
+}
+
+function prevImageGatoZombie() {
+  currentGatoZombieIndex = (currentGatoZombieIndex - 1 + GatoZombieImages.length) % GatoZombieImages.length;
+  updateGatoZombieImage();
+}
