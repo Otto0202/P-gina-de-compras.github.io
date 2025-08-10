@@ -44,7 +44,8 @@
 
     <!-- Productos -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
+<h2 class="text-2xl font-bold mb-4">Llaveros y Marcapáginas</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <!-- Producto con selección de color: Ballena -->
       <div class="bg-white p-4 rounded shadow">
     <img id="mainImageBallena" src="https://imgur.com/CBsm2tM.jpg" alt="Ballena" class="w-full h-55 object-cover mb-2">
@@ -224,6 +225,20 @@
         <button onclick="addToCart('Marcapáginas', 7000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
 
+  <!-- Producto 3: Deadpool -->
+      <div class="bg-white p-4 rounded shadow">
+ 
+
+    <div class="relative mb-4">
+  <img id="mainImageDeadpool" src="https://imgur.com/UhoodeB.jpg" alt="Deadpool" class="w-full h-55 object-cover mb-2 rounded">
+  <button onclick="prevImageDeadpool()" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-700 text-white px-2 rounded">&#10094;</button>
+  <button onclick="nextImageDeadpool()" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-700 text-white px-2 rounded">&#10095;</button>
+</div>
+        <h2 class="text-xl font-semibold">Deadpool</h2>
+        <p class="text-gray-600"> </p>
+        <p class="text-lg font-bold mt-2">$20.000</p>
+        <button onclick="addToCart('Deadpool', 20000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+      </div>
       
       <!-- Producto 3: Capibara -->
       <div class="bg-white p-4 rounded shadow">
@@ -239,7 +254,29 @@
         <p class="text-lg font-bold mt-2">$15.000</p>
         <button onclick="addToCart('Capibara', 15000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
       </div>
+</div>
+      <h2 class="text-2xl font-bold mb-4">Personalizados</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
+      <!-- Producto 2: Momo Ayase "DanDaDan" -->
+      <div class="bg-white p-4 rounded shadow">
+        <img src="https://imgur.com/1Hv8LeP.jpg" alt="Momo Ayase(DanDaDan)" class="w-full h-55 object-cover mb-4">
+        <h2 class="text-xl font-semibold">Momo Ayase(DanDaDan)</h2>
+        <p class="text-gray-600"> </p>
+        <p class="text-lg font-bold mt-2">$65.000</p>
+        <button onclick="addToCart('Momo Ayase(DanDaDan)', 65000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+      </div>
+
+   <!-- Producto 2: Hello Kitty -->
+      <div class="bg-white p-4 rounded shadow">
+        <img src="https://imgur.com/f2PzfVz.jpg" alt="Hello Kitty" class="w-full h-55 object-cover mb-4">
+        <h2 class="text-xl font-semibold">Hello Kitty</h2>
+        <p class="text-gray-600"> </p>
+        <p class="text-lg font-bold mt-2">$55.000</p>
+        <button onclick="addToCart('Hello Kitty', 55000)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
+      </div>
+  
+  </div>
 
     </div>
 
