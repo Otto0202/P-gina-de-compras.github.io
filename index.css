@@ -6,3 +6,13 @@ body {
 .logo-img {
   border-radius: 50%;
 }
+
+.titulo-nube {
+  display: inline-block;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-family: 'Pacifico', cursive; /* o la fuente que quieras */
+  font-size: 1.5rem;
+}
