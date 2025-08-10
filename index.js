@@ -196,3 +196,28 @@ function prevImageMarcapáginas() {
   currentMarcapáginasIndex = (currentMarcapáginasIndex - 1 + MarcapáginasImages.length) % MarcapáginasImages.length;
   updateMarcapáginasImage();
 }
+
+// ==== IMÁGENES CON FLECHAS PARA Deadpool ====
+
+const DeadpoolImages = [
+  "https://imgur.com/UhoodeB.jpg",
+  "https://imgur.com/Es2PW16.jpg",
+  
+];
+
+let currentDeadpoolIndex = 0;
+
+function updateDeadpoolImage() {
+  const imgElement = document.getElementById("mainImageDeadpool");
+  imgElement.src = DeadpoolImages[currentDeadpoolIndex];
+}
+
+function nextImageDeadpool() {
+  currentDeadpoolIndex = (currentDeadpoolIndex + 1) % DeadpoolImages.length;
+  updateDeadpoolImage();
+}
+
+function prevImageDeadpool() {
+  currentDeadpoolIndex = (currentDeadpoolIndex - 1 + DeadpoolImages.length) % DeadpoolImages.length;
+  updateDeadpoolImage();
+}
