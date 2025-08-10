@@ -200,8 +200,8 @@ function prevImageMarcapáginas() {
 // ==== IMÁGENES CON FLECHAS PARA Deadpool ====
 
 const DeadpoolImages = [
-  "https://imgur.com/j4IqDlN.jpg",
-  "https://imgur.com/QJ2xgJI.jpg",
+  "https://imgur.com/4vVWNdG.jpg",
+  "https://imgur.com/uFOEytq.jpg",
   
 ];
 
