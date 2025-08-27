@@ -270,3 +270,30 @@ function prevImageSeñorPool() {
   currentSeñorPoolIndex = (currentSeñorPoolIndex - 1 + SeñorPoolImages.length) % SeñorPoolImages.length;
   updateSeñorPoolImage();
 }
+
+
+// ==== IMÁGENES CON FLECHAS PARA Pez ====
+
+const PezImages = [
+  "https://imgur.com/qQP7Qej.jpg",
+  "https://imgur.com/sT6o13M.jpg",
+  
+];
+
+let currentPezIndex = 0;
+
+function updatePezImage() {
+  const imgElement = document.getElementById("mainImagePez");
+  imgElement.src = PezImages[currentPezIndex];
+}
+
+function nextImagePez() {
+  currentPezIndex = (currentPezIndex + 1) % PezImages.length;
+  updatePezImage();
+}
+
+function prevImagePez() {
+  currentPezIndex = (currentPezIndex - 1 + PezImages.length) % PezImages.length;
+  updatePezImage();
+}
+
