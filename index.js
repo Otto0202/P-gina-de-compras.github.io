@@ -297,3 +297,27 @@ function prevImagePez() {
   updatePezImage();
 }
 
+// ==== IMÁGENES CON FLECHAS PARA Pulpo ====
+
+const PulpoImages = [
+  "https://imgur.com/JaS7BSI.jpg",
+  "https://imgur.com/ncMzEr6.jpg",
+  
+];
+
+let currentPulpoIndex = 0;
+
+function updatePulpoImage() {
+  const imgElement = document.getElementById("mainImagePulpo");
+  imgElement.src = PulpoImages[currentPulpoIndex];
+}
+
+function nextImagePulpo() {
+  currentPulpoIndex = (currentPulpoIndex + 1) % PulpoImages.length;
+  updatePulpoImage();
+}
+
+function prevImagePulpo() {
+  currentPulpoIndex = (currentPulpoIndex - 1 + PulpoImages.length) % PulpoImages.length;
+  updatePulpoImage();
+}
