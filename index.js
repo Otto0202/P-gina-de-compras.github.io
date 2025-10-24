@@ -138,20 +138,19 @@ function checkout() {
   message += `\nTotal de la compra: $${total}`;
   const encodedMessage = encodeURIComponent(message);
 
-  let phoneNumber = selectedSeller === 'Jeammy'
-    ? '573008140612'
-    : '573014354201'; // Reemplaza este número por el real de Anderson
-
+  let phoneNumber = selectedSeller === 'NOMBRE'
+    ? '57NUMERO1'
+    : '57NUMERO2'; 
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
 // ==== IMÁGENES CON FLECHAS PARA CAPIBARA ====
 
 const capibaraImages = [
-  "https://imgur.com/wI98VVk.jpg",
-  "https://imgur.com/m1pJ7Pk.jpg",
-  "https://imgur.com/SRTpOKs.jpg",
-  "https://imgur.com/xK9zprV.jpg",
-  "https://imgur.com/0FTSdhQ.jpg"
+  ".jpg",
+  ".jpg",
+  ".jpg",
+  ".jpg",
+  ".jpg"
 ];
 
 let currentCapibaraIndex = 0;
@@ -175,8 +174,8 @@ function prevImageCapibara() {
 // ==== IMÁGENES CON FLECHAS PARA Marcapáginas ====
 
 const MarcapáginasImages = [
-  "https://imgur.com/8zEzIUq.jpg",
-  "https://imgur.com/GPO6OmJ.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
@@ -200,8 +199,8 @@ function prevImageMarcapáginas() {
 // ==== IMÁGENES CON FLECHAS PARA Deadpool ====
 
 const DeadpoolImages = [
-  "https://imgur.com/4vVWNdG.jpg",
-  "https://imgur.com/uFOEytq.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
@@ -225,8 +224,8 @@ function prevImageDeadpool() {
 // ==== IMÁGENES CON FLECHAS PARA GatoZombie ====
 
 const GatoZombieImages = [
-  "https://imgur.com/ZXbVuZz.jpg",
-  "https://imgur.com/XLz1OaD.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
@@ -249,8 +248,8 @@ function prevImageGatoZombie() {
 // ==== IMÁGENES CON FLECHAS PARA SeñorPool ====
 
 const SeñorPoolImages = [
-  "https://imgur.com/4o5TPuG.jpg",
-  "https://imgur.com/Ik3zxaw.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
@@ -275,8 +274,8 @@ function prevImageSeñorPool() {
 // ==== IMÁGENES CON FLECHAS PARA Pez ====
 
 const PezImages = [
-  "https://imgur.com/qQP7Qej.jpg",
-  "https://imgur.com/sT6o13M.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
@@ -300,8 +299,8 @@ function prevImagePez() {
 // ==== IMÁGENES CON FLECHAS PARA Pulpo ====
 
 const PulpoImages = [
-  "https://imgur.com/JaS7BSI.jpg",
-  "https://imgur.com/ncMzEr6.jpg",
+  ".jpg",
+  ".jpg",
   
 ];
 
