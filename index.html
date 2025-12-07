@@ -38,28 +38,17 @@
 <h2 class="titulo-nube">Llaveros y Marcapáginas</h2>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
   
-      <!-- Producto con selección de color: Ballena -->
+      <!-- Producto con selección de color: Empanada -->
       <div class="bg-white p-4 rounded shadow">
-    <img id="mainImageBallena" src=".jpg" alt="Ballena" class="w-full h-55 object-cover mb-2">
-        <h2 class="text-xl font-semibold">Ballena</h2>
-        <p class="text-gray-600">Dale un toque marino y adorable a tus llaves con este tierno llavero de ballena tejido en crochet. ¡Hecho a mano con todo el cariño!</p>
-        <label for="colorBallena" class="block mt-2 text-sm font-medium text-gray-700">Color:</label>
-        <select id="colorBallena" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-          <option value="10000">Rojo</option>
-          <option value="10000">Amarillo</option>
-          <option value="10000">Verde oscuro</option>
-          <option value="10000">Verde claro</option>
-          <option value="10000">Rosado</option>
-          <option value="10000">Azul oscuro</option>
-          <option value="10000">Morado</option>
-          <option value="10000">Azul claro</option>
-          <option value="10000">Naranja</option>
-          <option value="10000">Gris</option>
-          <option value="10000">Negro</option>
-          <option value="12000">Especial</option>
-          <option value="10000">Blanco</option>
-          <option value="10000">Marrón oscuro</option>
-          <option value="10000">Marrón claro</option>
+    <img id="mainImageEmpanada" src="https://imgur.com/XgEIdeN.jpg" alt="Empanada" class="w-full h-55 object-cover mb-2">
+        <h2 class="text-xl font-semibold">Empanadas & Arepas rellenas</h2>
+        <p class="text-gray-600"></p>
+        <label for="colorEmpanada" class="block mt-2 text-sm font-medium text-gray-700">Selecciónr:</label>
+        <select id="colorEmpanada" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+          <option value="3000">Empanada</option>
+          <option value="6000">Arepa Rellena</option>
+          <option value="28000">Empanada x10</option>
+           <option value="56000">Arepa Rellena x10</option>
         </select>
           <p class="text-lg font-bold mt-2">$10.000</p>
         <button onclick="addToCart('Ballena', parseInt(document.getElementById('colorBallena').value), document.getElementById('colorBallena').options[document.getElementById('colorBallena').selectedIndex].text)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
