@@ -6,7 +6,7 @@ function closeAlertModal() {
 // Carrito
 let cart = [];
 
-// Cambiar precio dinámicamente
+// Cambiar precio dinámico
 function updatePrice() {
   const price = document.getElementById("colorEmpanada").value;
   document.getElementById("priceEmpanada").textContent =
@@ -18,12 +18,15 @@ function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
 
   if (!product) {
-    product = { name: productName, price: price, options: {} };
+    product = { name: productName, options: {} };
     cart.push(product);
   }
 
-  if (!product.options[optionName]) product.options[optionName] = 1;
-  else product.options[optionName]++;
+  if (!product.options[optionName]) {
+    product.options[optionName] = { qty: 1, price: price };
+  } else {
+    product.options[optionName].qty++;
+  }
 
   updateCart();
 }
@@ -49,34 +52,38 @@ function updateCart() {
     title.textContent = item.name;
     div.appendChild(title);
 
-    Object.entries(item.options).forEach(([option, qty]) => {
+    Object.entries(item.options).forEach(([option, data]) => {
       let row = document.createElement("div");
       row.className = "flex justify-between items-center ml-4 gap-2";
 
+      const subtotal = data.qty * data.price;
+
       row.innerHTML = `
-        <span>(${option} x ${qty})</span>
-        <span>$${(qty * item.price).toLocaleString("es-CO")}</span>
+        <span>(${option} x ${data.qty})</span>
+        <span>$${subtotal.toLocaleString("es-CO")}</span>
       `;
 
+      // Botón +
       let btnAdd = document.createElement("button");
       btnAdd.className = "bg-green-500 text-white px-2 py-1 rounded";
       btnAdd.textContent = "+";
       btnAdd.onclick = () => {
-        cart[index].options[option]++;
+        item.options[option].qty++;
         updateCart();
       };
 
+      // Botón -
       let btnRemove = document.createElement("button");
       btnRemove.className = "bg-red-500 text-white px-2 py-1 rounded";
       btnRemove.textContent = "-";
       btnRemove.onclick = () => {
-        if (cart[index].options[option] > 1) {
-          cart[index].options[option]--;
+        if (item.options[option].qty > 1) {
+          item.options[option].qty--;
         } else {
-          delete cart[index].options[option];
+          delete item.options[option];
         }
 
-        if (Object.keys(cart[index].options).length === 0) {
+        if (Object.keys(item.options).length === 0) {
           cart.splice(index, 1);
         }
 
@@ -87,12 +94,9 @@ function updateCart() {
       row.appendChild(btnRemove);
 
       div.appendChild(row);
-    });
 
-    total += Object.values(item.options).reduce(
-      (acc, qty) => acc + qty * item.price,
-      0
-    );
+      total += subtotal;
+    });
 
     cartDiv.appendChild(div);
   });
@@ -103,7 +107,7 @@ function updateCart() {
   cartDiv.appendChild(totalDiv);
 }
 
-// Enviar pedido a WhatsApp
+// WhatsApp
 function checkout() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío.");
@@ -114,22 +118,17 @@ function checkout() {
   let total = 0;
 
   cart.forEach(item => {
-    const optionsText = Object.entries(item.options)
-      .map(([op, qty]) => `(${op} x ${qty})`)
-      .join(" ");
-
-    const subtotal = Object.values(item.options)
-      .reduce((acc, qty) => acc + qty * item.price, 0);
-
-    total += subtotal;
-    message += `- ${item.name} ${optionsText}\n`;
+    Object.entries(item.options).forEach(([op, data]) => {
+      const subtotal = data.qty * data.price;
+      total += subtotal;
+      message += `- ${item.name} (${op} x ${data.qty}) → $${subtotal.toLocaleString("es-CO")}\n`;
+    });
   });
 
   message += `\nTotal de la compra: $${total.toLocaleString("es-CO")}`;
 
   const encoded = encodeURIComponent(message);
-
-  const phone = "573239618378"; // ✔ Tu número correcto
+  const phone = "573239618378";
 
   window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
 }
