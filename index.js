@@ -1,4 +1,4 @@
-// Cerrar modal
+// Cerrar modal de aviso
 function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
 }
@@ -131,4 +131,18 @@ function checkout() {
   const phone = "573239618378";
 
   window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+}
+
+// --- MODAL DE IMAGEN AMPLIADA ---
+
+function openImageModal(src) {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+
+  modalImg.src = src;
+  modal.classList.remove("hidden");
+}
+
+function closeImageModal() {
+  document.getElementById("imageModal").classList.add("hidden");
 }
