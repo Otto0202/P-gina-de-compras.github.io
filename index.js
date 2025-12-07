@@ -320,23 +320,5 @@ function prevImagePulpo() {
   currentPulpoIndex = (currentPulpoIndex - 1 + PulpoImages.length) % PulpoImages.length;
   updatePulpoImage();
 }
-function updatePriceEmpanada() {
-    const select = document.getElementById("colorEmpanada");
-    const price = select.value;
 
-    document.getElementById("priceEmpanada").innerText = 
-      "$" + Number(price).toLocaleString("es-CO");
-  }
-
-  function agregarEmpanada() {
-    const select = document.getElementById("colorEmpanada");
-    const price = parseInt(select.value);
-    const label = select.options[select.selectedIndex].text;
-
-    // ENVÍO CORRECTO AL CARRITO
-    addToCart(
-      label,   // nombre de la opción seleccionada
-      price,   // precio exacto
-      label    // texto visible en el carrito
-    );
-  }
+    
