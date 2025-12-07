@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChiquiDetalles — Tienda</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    .modal-enter { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    .modal-enter-active { transition: all 180ms ease-out; opacity: 1; transform: translateY(0) scale(1); }
+    .modal-leave { opacity: 1; }
+    .modal-leave-active { transition: all 120ms ease-in; opacity: 0; transform: translateY(-8px) scale(0.98); }
+    .price { font-variant-numeric: tabular-nums; }
+    .logo-img { object-fit: cover; border-radius: 12px; }
+    .dark-mode { background-color: #0f172a; color: #e6eef8; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen">
+  <div class="max-w-6xl mx-auto p-6">
+    <header class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <img src="https://imgur.com/pV0dmDq.jpg" alt="logo" class="w-20 h-20 logo-img">
+        <div>
+          <h1 class="text-3xl font-bold">ChiquiDetalles</h1>
+          <p class="text-sm text-gray-600">Regalos y detalles hechos a mano</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="toggleDark" class="px-3 py-1 rounded bg-gray-200">Modo oscuro</button>
+        <button id="openCartBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Ver carrito</button>
+      </div>
+    </header>
+
+    <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-sm text-center shadow-lg modal-enter modal-enter-active">
+        <h2 class="text-lg font-bold mb-4">El precio del domicilio varía dependiendo del sector o zona de entrega</h2>
+        <p class="text-sm text-gray-600 mb-4">Al aceptar podrás ver los productos y seguir con tu compra.</p>
+        <button id="acceptModal" class="bg-blue-600 text-white px-4 py-2 rounded">Aceptar</button>
+      </div>
+    </div>
+
+    <main class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <section class="md:col-span-2">
+        <h2 class="text-2xl font-semibold mb-4">Comidas</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+
+          <article class="bg-white p-4 rounded shadow">
+            <img id="mainImageEmpanada" src="https://imgur.com/XgEIdeN.jpg" alt="Empanada" class="w-full h-44 object-cover rounded mb-3">
+            <h3 class="text-xl font-semibold">Empanadas & Arepas rellenas</h3>
+            <label for="colorEmpanada" class="block text-sm mt-2">Seleccionar:</label>
+            <select id="colorEmpanada" class="mt-1 block w-full border rounded p-2" onchange="updatePriceEmpanada()">
+              <option value="3000">Empanada</option>
+              <option value="6000">Arepa Rellena</option>
+              <option value="28000">Empanada x10</option>
+              <option value="56000">Arepa Rellena x10</option>
+            </select>
+            <p id="priceEmpanada" class="text-lg font-bold mt-3 price">$3.000</p>
+            <div class="flex gap-2 mt-3">
+              <button onclick="agregarEmpanada()" class="flex-1 bg-green-500 text-white px-4 py-2 rounded">Agregar al carrito</button>
+            </div>
+          </article>
+
+          <article class="bg-white p-4 rounded shadow">
+            <div class="relative mb-3">
+              <img id="mainImageMarcapaginas" src="https://i.imgur.com/XgEIdeN.jpg" alt="Marcapaginas" class="w-full h-44 object-cover rounded">
+            </div>
+            <h3 class="text-xl font-semibold">Marcapáginas</h3>
+            <p class="text-sm text-gray-600">Marcapáginas floral tejido, único y artesanal.</p>
+            <p class="text-lg font-bold mt-3 price">$7.000</p>
+            <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded" onclick="addToCart('Marcapáginas',7000)">Agregar al carrito</button>
+          </article>
+
+          <article class="bg-white p-4 rounded shadow">
+            <img src="https://i.imgur.com/IOY2zVq.jpeg" alt="Momo" class="w-full h-44 object-cover rounded mb-3">
+            <h3 class="text-xl font-semibold">Momo Ayase (DanDaDan)</h3>
+            <p class="text-sm text-gray-600">Figura tejida a mano. Pedido por encargo.</p>
+            <p class="text-lg font-bold mt-3 price">$65.000</p>
+            <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded" onclick="addToCart('Momo Ayase (DanDaDan)',65000)">Agregar al carrito</button>
+          </article>
+
+          <article class="bg-white p-4 rounded shadow">
+            <img src="https://i.imgur.com/EQUNbdr.jpeg" alt="Hello Kitty" class="w-full h-44 object-cover rounded mb-3">
+            <h3 class="text-xl font-semibold">Hello Kitty</h3>
+            <p class="text-sm text-gray-600">Figura adorable en crochet.</p>
+            <p class="text-lg font-bold mt-3 price">$55.000</p>
+            <button class="mt-3 bg-green-500 text-white px-4 py-2 rounded" onclick="addToCart('Hello Kitty',55000)">Agregar al carrito</button>
+          </article>
+
+        </div>
+      </section>
+
+      <aside class="bg-white p-4 rounded shadow">
+        <h2 class="text-2xl font-semibold mb-3">Carrito</h2>
+        <div id="cart">
+          <p>No hay productos en el carrito.</p>
+        </div>
+
+        <div class="mt-4">
+          <button id="checkoutBtn" onclick="checkout()" class="w-full bg-green-600 text-white px-4 py-2 rounded">Pagar por WhatsApp</button>
+        </div>
+
+        <p class="text-xs text-gray-500 mt-3">Número de contacto: +57 323 9618378</p>
+      </aside>
+    </main>
+
+    <footer class="text-center text-sm text-gray-600 mt-8">© ChiquiDetalles</footer>
+  </div>
+
+<script src="index.js"></script>
+</body>
+</html>
