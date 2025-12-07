@@ -11,7 +11,7 @@
       background-image: url('https://imgur.com/vjQBpbQ.jpg');
       background-size: cover;
       background-repeat: repeat;
-      background-attachment: fixed;
+      background-attachment: scroll; /* 🔥 AHORA EL FONDO SE MUEVE */
       background-position: center;
     }
   </style>
@@ -19,7 +19,7 @@
 
 <body class="bg-gray-100 bg-opacity-90 p-6">
 
-<!-- MODAL DE AVISO -->
+<!-- MODAL -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-lg text-center space-y-4 max-w-sm">
     <h2 class="text-xl font-bold">
@@ -31,7 +31,6 @@
   </div>
 </div>
 
-<!-- LOGO -->
 <div class="max-w-6xl mx-auto">
   <div class="flex items-center justify-center mb-6">
     <img src="https://imgur.com/pV0dmDq.jpg" class="w-32 h-32 logo-img">
@@ -39,24 +38,26 @@
 
   <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
 
-  <!-- LISTA DE PRODUCTOS -->
   <h2 class="text-3xl font-bold text-center mb-4">Comidas</h2>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-    <!-- PRODUCTO: EMPANADAS -->
+    <!-- PRODUCTO -->
     <div class="bg-white p-4 rounded shadow">
       <img src="https://imgur.com/XgEIdeN.jpg" class="w-full h-55 object-cover mb-2">
       <h2 class="text-xl font-semibold">Empanadas & Arepas rellenas</h2>
 
       <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
 
-      <select id="colorEmpanada" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+      <select id="colorEmpanada" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
         <option value="3000">Empanada</option>
         <option value="6000">Arepa Rellena</option>
         <option value="28000">Empanada x10</option>
         <option value="56000">Arepa Rellena x10</option>
       </select>
+
+      <!-- PRECIO DINÁMICO -->
+      <p id="priceEmpanada" class="text-lg font-bold mt-2">$3.000</p>
 
       <button
         onclick="addToCart(
