@@ -106,13 +106,32 @@
       </button>
 
     </div>
+    <!-- PRODUCTO DE UNA SOLA OPCIÓN -->
+<div class="bg-white p-4 rounded shadow">
 
+  <img 
+    src="https://imgur.com/TU-IMAGEN.jpg"
+    class="product-img"
+    onclick="openImageModal(this.src)"
+  >
+
+  <h2 class="text-xl font-semibold mt-2">Sándwich Especial</h2>
+
+  <p class="text-lg font-bold mt-2">$18.000</p>
+
+  <button
+    onclick="addToCart('Sándwich Especial', 18000, 'Único')"
+    class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+    Agregar al carrito
+  </button>
+
+</div>
 
     <!-- EJEMPLO: PRODUCTO 2 (tu imagen de sándwich) -->
     <div class="bg-white p-4 rounded shadow">
 
       <img 
-        src="IMG-DEL-SANDWICH-AQUI" 
+        src="https://imgur.com/BOyqyCZ.jpg" 
         class="product-img"
         onclick="openImageModal(this.src)"
       >
