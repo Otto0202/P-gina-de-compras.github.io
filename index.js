@@ -1,25 +1,21 @@
-
-
-
+// Cerrar modal de aviso
 function closeAlertModal() {
-  document.getElementById('welcomeModal').style.display = 'none';
+  document.getElementById("welcomeModal").style.display = "none";
 }
 
-function addToCart(productName, price, color = null) {
+// Carrito
+let cart = [];
+
+function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
 
   if (!product) {
-    product = { name: productName, price, colors: {} };
+    product = { name: productName, price, options: {} };
     cart.push(product);
   }
 
-  if (color) {
-    if (!product.colors[color]) product.colors[color] = 1;
-    else product.colors[color] += 1;
-  } else {
-    if (!product.colors["Único"]) product.colors["Único"] = 1;
-    else product.colors["Único"] += 1;
-  }
+  if (!product.options[optionName]) product.options[optionName] = 1;
+  else product.options[optionName]++;
 
   updateCart();
 }
@@ -35,99 +31,94 @@ function updateCart() {
 
   let total = 0;
 
-  cart.forEach((item, productIndex) => {
-    let productContainer = document.createElement("div");
-    productContainer.className = "mb-4 p-2 border-b";
+  cart.forEach((item, index) => {
+    let div = document.createElement("div");
+    div.className = "mb-4 p-2 border-b";
 
-    let productTitle = document.createElement("p");
-    productTitle.className = "font-bold";
-    productTitle.textContent = item.name;
-    productContainer.appendChild(productTitle);
+    let title = document.createElement("p");
+    title.className = "font-bold";
+    title.textContent = item.name;
+    div.appendChild(title);
 
-    Object.entries(item.colors).forEach(([color, qty]) => {
-      let colorDiv = document.createElement("div");
-      colorDiv.className = "flex justify-between items-center ml-4 gap-2";
+    Object.entries(item.options).forEach(([option, qty]) => {
+      let row = document.createElement("div");
+      row.className = "flex justify-between items-center ml-4 gap-2";
 
-      let colorText = document.createElement("span");
-      colorText.textContent = `(${color} x ${qty})`;
+      row.innerHTML = `
+        <span>(${option} x ${qty})</span>
+        <span>$${qty * item.price}</span>
+      `;
 
-      let colorPrice = document.createElement("span");
-      colorPrice.textContent = `$${qty * item.price}`;
+      let btnAdd = document.createElement("button");
+      btnAdd.className = "bg-green-500 text-white px-2 py-1 rounded";
+      btnAdd.textContent = "+";
+      btnAdd.onclick = () => {
+        cart[index].options[option]++;
+        updateCart();
+      };
 
-      let addButton = document.createElement("button");
-      addButton.className = "bg-green-500 text-white px-2 py-1 rounded";
-      addButton.textContent = "+";
-      addButton.onclick = () => addColorQuantity(productIndex, color);
+      let btnRemove = document.createElement("button");
+      btnRemove.className = "bg-red-500 text-white px-2 py-1 rounded";
+      btnRemove.textContent = "-";
+      btnRemove.onclick = () => {
+        if (cart[index].options[option] > 1) {
+          cart[index].options[option]--;
+        } else {
+          delete cart[index].options[option];
+        }
 
-      let removeButton = document.createElement("button");
-      removeButton.className = "bg-red-500 text-white px-2 py-1 rounded";
-      removeButton.textContent = "-";
-      removeButton.onclick = () => removeColorFromCart(productIndex, color);
+        if (Object.keys(cart[index].options).length === 0) {
+          cart.splice(index, 1);
+        }
 
-      colorDiv.appendChild(colorText);
-      colorDiv.appendChild(colorPrice);
-      colorDiv.appendChild(addButton);
-      colorDiv.appendChild(removeButton);
+        updateCart();
+      };
 
-      productContainer.appendChild(colorDiv);
+      row.appendChild(btnAdd);
+      row.appendChild(btnRemove);
+
+      div.appendChild(row);
     });
 
-    let subtotal = Object.values(item.colors).reduce((acc, qty) => acc + qty * item.price, 0);
-    total += subtotal;
+    total += Object.values(item.options).reduce((acc, qty) => acc + qty * item.price, 0);
 
-    cartDiv.appendChild(productContainer);
+    cartDiv.appendChild(div);
   });
 
-  const totalDiv = document.createElement("div");
+  let totalDiv = document.createElement("div");
   totalDiv.className = "font-bold mt-4";
   totalDiv.textContent = `Total: $${total}`;
   cartDiv.appendChild(totalDiv);
 }
 
-function addColorQuantity(productIndex, color) {
-  cart[productIndex].colors[color] += 1;
-  updateCart();
-}
-
-function removeColorFromCart(productIndex, color) {
-  let product = cart[productIndex];
-
-  if (product.colors[color] > 1) {
-    product.colors[color] -= 1;
-  } else {
-    delete product.colors[color];
-  }
-
-  if (Object.keys(product.colors).length === 0) {
-    cart.splice(productIndex, 1);
-  }
-
-  updateCart();
-}
-
+// ENVIAR PEDIDO POR WHATSAPP (UN SOLO NUMERO)
 function checkout() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío.");
     return;
   }
 
-
   let message = "Hola, quiero comprar:\n";
   let total = 0;
 
   cart.forEach(item => {
-    let colorsText = Object.entries(item.colors)
-      .map(([color, qty]) => `(${color} x ${qty})`)
+    const optionsText = Object.entries(item.options)
+      .map(([op, qty]) => `(${op} x ${qty})`)
       .join(" ");
-    let subtotal = Object.values(item.colors).reduce((acc, qty) => acc + qty * item.price, 0);
+
+    const subtotal = Object.values(item.options)
+      .reduce((acc, qty) => acc + qty * item.price, 0);
+
     total += subtotal;
-    message += `- ${item.name} ${colorsText}\n`;
+    message += `- ${item.name} ${optionsText}\n`;
   });
 
   message += `\nTotal de la compra: $${total}`;
-  const encodedMessage = encodeURIComponent(message);
 
-  let phoneNumber = selectedSeller === 'NOMBRE'
-    ? '57 323 9618378'; 
-  window.open(`https://wa.me/57 323 9618378`, "_blank");
+  const encoded = encodeURIComponent(message);
+
+  // ÚNICO NÚMERO DE WHATSAPP
+  const phone = "573239618378";
+
+  window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
 }
