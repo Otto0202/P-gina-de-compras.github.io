@@ -1,12 +1,5 @@
 
-let cart = [];
-let selectedSeller = null;
 
-function selectSeller(name) {
-  selectedSeller = name;
-  document.getElementById('welcomeModal').style.display = 'none';
-  
-}
 
 function closeAlertModal() {
   document.getElementById('welcomeModal').style.display = 'none';
