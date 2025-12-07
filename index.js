@@ -1,4 +1,4 @@
-// Cerrar modal de aviso
+// Cerrar modal
 function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
 }
@@ -6,11 +6,19 @@ function closeAlertModal() {
 // Carrito
 let cart = [];
 
+// Cambiar precio dinámicamente
+function updatePrice() {
+  const price = document.getElementById("colorEmpanada").value;
+  document.getElementById("priceEmpanada").textContent =
+    "$" + Number(price).toLocaleString("es-CO");
+}
+
+// Agregar al carrito
 function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
 
   if (!product) {
-    product = { name: productName, price, options: {} };
+    product = { name: productName, price: price, options: {} };
     cart.push(product);
   }
 
@@ -20,6 +28,7 @@ function addToCart(productName, price, optionName = "Único") {
   updateCart();
 }
 
+// Actualizar carrito
 function updateCart() {
   const cartDiv = document.getElementById("cart");
   cartDiv.innerHTML = "";
@@ -46,7 +55,7 @@ function updateCart() {
 
       row.innerHTML = `
         <span>(${option} x ${qty})</span>
-        <span>$${qty * item.price}</span>
+        <span>$${(qty * item.price).toLocaleString("es-CO")}</span>
       `;
 
       let btnAdd = document.createElement("button");
@@ -80,18 +89,21 @@ function updateCart() {
       div.appendChild(row);
     });
 
-    total += Object.values(item.options).reduce((acc, qty) => acc + qty * item.price, 0);
+    total += Object.values(item.options).reduce(
+      (acc, qty) => acc + qty * item.price,
+      0
+    );
 
     cartDiv.appendChild(div);
   });
 
   let totalDiv = document.createElement("div");
   totalDiv.className = "font-bold mt-4";
-  totalDiv.textContent = `Total: $${total}`;
+  totalDiv.textContent = `Total: $${total.toLocaleString("es-CO")}`;
   cartDiv.appendChild(totalDiv);
 }
 
-// ENVIAR PEDIDO POR WHATSAPP (UN SOLO NUMERO)
+// Enviar pedido a WhatsApp
 function checkout() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío.");
@@ -113,12 +125,11 @@ function checkout() {
     message += `- ${item.name} ${optionsText}\n`;
   });
 
-  message += `\nTotal de la compra: $${total}`;
+  message += `\nTotal de la compra: $${total.toLocaleString("es-CO")}`;
 
   const encoded = encodeURIComponent(message);
 
-  // ÚNICO NÚMERO DE WHATSAPP
-  const phone = "573239618378";
+  const phone = "573239618378"; // ✔ Tu número correcto
 
   window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
 }
