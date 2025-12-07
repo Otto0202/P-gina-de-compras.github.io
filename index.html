@@ -5,68 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ChiquiDetalles</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="index.css" />
+
   <style>
     body {
-    background-image: url('https://imgur.com/vjQBpbQ.jpg');
-    background-size: cover;
-    background-repeat: repeat;
-    background-attachment: fixed;
-    background-position: center;
-  }
+      background-image: url('https://imgur.com/vjQBpbQ.jpg');
+      background-size: cover;
+      background-repeat: repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
   </style>
 </head>
+
 <body class="bg-gray-100 bg-opacity-90 p-6">
 
-<!-- Modal de selección -->
+<!-- MODAL DE AVISO -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-lg text-center space-y-4 max-w-sm">
-    <h2 class="text-xl font-bold">El precio del domicilio varía dependiendo del sector o zona de entrega</h2>
-     <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-4 py-2 rounded">Aceptar</button>
+    <h2 class="text-xl font-bold">
+      El precio del domicilio varía dependiendo del sector o zona de entrega
+    </h2>
+    <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-4 py-2 rounded">
+      Aceptar
+    </button>
   </div>
-      </div>
-    </div>
-  <div class="max-w-6xl mx-auto">
-    <div class="flex items-center justify-center mb-6">
-      <img src="https://imgur.com/pV0dmDq.jpg" class="w-32 h-32 logo-img">
-    </div>
-    <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
+</div>
 
-    <!-- Productos -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-       </div>
-<h2 class="titulo-nube">Comidas</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-  
-      <!-- Producto con selección de color: Empanada -->
-      <div class="bg-white p-4 rounded shadow">
-    <img id="mainImageEmpanada" src="https://imgur.com/XgEIdeN.jpg" alt="Empanada" class="w-full h-55 object-cover mb-2">
-        <h2 class="text-xl font-semibold">Empanadas & Arepas rellenas</h2>
-        <p class="text-gray-600"></p>
-        <label for="colorEmpanada" class="block mt-2 text-sm font-medium text-gray-700">Selecciónr:</label>
-        <select id="colorEmpanada" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-          <option value="3000">Empanada</option>
-          <option value="6000">Arepa Rellena</option>
-          <option value="28000">Empanada x10</option>
-           <option value="56000">Arepa Rellena x10</option>
-        </select>
-          <p class="text-lg font-bold mt-2">$10.000</p>
-        <button onclick="addToCart('Empanada', parseInt(document.getElementById('colorEmpanada').value), document.getElementById('colorEmpanada').options[document.getElementById('colorEmpanada').selectedIndex].text)" class="bg-green-500 text-white px-4 py-2 mt-2 rounded">Agregar al carrito</button>
-      </div>
-   
-    
+<!-- LOGO -->
+<div class="max-w-6xl mx-auto">
+  <div class="flex items-center justify-center mb-6">
+    <img src="https://imgur.com/pV0dmDq.jpg" class="w-32 h-32 logo-img">
+  </div>
 
-  <title>Carrito de Compras</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 p-6">
-   <!-- Carrito -->
+  <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
+
+  <!-- LISTA DE PRODUCTOS -->
+  <h2 class="text-3xl font-bold text-center mb-4">Comidas</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+    <!-- PRODUCTO: EMPANADAS -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/XgEIdeN.jpg" class="w-full h-55 object-cover mb-2">
+      <h2 class="text-xl font-semibold">Empanadas & Arepas rellenas</h2>
+
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+
+      <select id="colorEmpanada" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="3000">Empanada</option>
+        <option value="6000">Arepa Rellena</option>
+        <option value="28000">Empanada x10</option>
+        <option value="56000">Arepa Rellena x10</option>
+      </select>
+
+      <button
+        onclick="addToCart(
+          'Empanadas & Arepas',
+          parseInt(document.getElementById('colorEmpanada').value),
+          document.getElementById('colorEmpanada').options[document.getElementById('colorEmpanada').selectedIndex].text
+        )"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded">
+        Agregar al carrito
+      </button>
+    </div>
+
+  </div>
+
+  <!-- CARRITO -->
   <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold mb-4 text-center">Carrito de Compras</h1>
+
     <div class="bg-white p-4 rounded shadow">
       <h2 class="text-2xl font-bold mb-4">Carrito</h2>
       <div id="cart"><p>No hay productos en el carrito.</p></div>
-      <button onclick="checkout()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">Pagar por WhatsApp</button>
+
+      <button onclick="checkout()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded">
+        Pagar por WhatsApp
+      </button>
     </div>
   </div>
 </div>
