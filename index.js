@@ -118,10 +118,6 @@ function checkout() {
     return;
   }
 
-  if (!selectedSeller) {
-    alert("Por favor selecciona de parte de quién vienes primero.");
-    return;
-  }
 
   let message = "Hola, quiero comprar:\n";
   let total = 0;
@@ -139,9 +135,8 @@ function checkout() {
   const encodedMessage = encodeURIComponent(message);
 
   let phoneNumber = selectedSeller === 'NOMBRE'
-    ? '57 323 9618378'
-    : '57NUMERO2'; 
-  window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
+    ? '57 323 9618378'; 
+  window.open(`https://wa.me/57 323 9618378`, "_blank");
 }
 // ==== IMÁGENES CON FLECHAS PARA CAPIBARA ====
 
