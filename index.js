@@ -3,17 +3,31 @@ function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
 }
 
-// Carrito
 let cart = [];
 
-// Cambiar precio dinámico
+
+// ------------------------
+// ACTUALIZAR PRECIOS
+// ------------------------
+
 function updatePrice() {
   const price = document.getElementById("colorEmpanada").value;
   document.getElementById("priceEmpanada").textContent =
     "$" + Number(price).toLocaleString("es-CO");
 }
 
-// Agregar al carrito
+function updatePriceSandwich() {
+  const price = document.getElementById("colorSandwich").value;
+  document.getElementById("priceSandwich").textContent =
+    "$" + Number(price).toLocaleString("es-CO");
+}
+
+
+
+// ------------------------
+// AGREGAR AL CARRITO
+// ------------------------
+
 function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
 
@@ -31,7 +45,12 @@ function addToCart(productName, price, optionName = "Único") {
   updateCart();
 }
 
-// Actualizar carrito
+
+
+// ------------------------
+// ACTUALIZAR CARRITO
+// ------------------------
+
 function updateCart() {
   const cartDiv = document.getElementById("cart");
   cartDiv.innerHTML = "";
@@ -63,30 +82,28 @@ function updateCart() {
         <span>$${subtotal.toLocaleString("es-CO")}</span>
       `;
 
-      // Botón +
+      // +
       let btnAdd = document.createElement("button");
       btnAdd.className = "bg-green-500 text-white px-2 py-1 rounded";
       btnAdd.textContent = "+";
       btnAdd.onclick = () => {
-        item.options[option].qty++;
+        data.qty++;
         updateCart();
       };
 
-      // Botón -
+      // -
       let btnRemove = document.createElement("button");
       btnRemove.className = "bg-red-500 text-white px-2 py-1 rounded";
       btnRemove.textContent = "-";
       btnRemove.onclick = () => {
-        if (item.options[option].qty > 1) {
-          item.options[option].qty--;
+        if (data.qty > 1) {
+          data.qty--;
         } else {
           delete item.options[option];
         }
-
         if (Object.keys(item.options).length === 0) {
           cart.splice(index, 1);
         }
-
         updateCart();
       };
 
@@ -107,7 +124,12 @@ function updateCart() {
   cartDiv.appendChild(totalDiv);
 }
 
-// WhatsApp
+
+
+// ------------------------
+// ENVIAR A WHATSAPP
+// ------------------------
+
 function checkout() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío.");
@@ -125,15 +147,17 @@ function checkout() {
     });
   });
 
-  message += `\nTotal de la compra: $${total.toLocaleString("es-CO")}`;
-
+  message += `\nTotal: $${total.toLocaleString("es-CO")}`;
   const encoded = encodeURIComponent(message);
-  const phone = "573239618378";
 
-  window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
+  window.open(`https://wa.me/573239618378?text=${encoded}`, "_blank");
 }
 
-// --- MODAL DE IMAGEN AMPLIADA ---
+
+
+// ------------------------
+// MODAL DE IMAGEN COMPLETA
+// ------------------------
 
 function openImageModal(src) {
   const modal = document.getElementById("imageModal");
@@ -143,6 +167,12 @@ function openImageModal(src) {
   modal.classList.remove("hidden");
 }
 
-function closeImageModal() {
+function closeImageModal(event) {
+  if (event.target.id === "imageModal") {
+    document.getElementById("imageModal").classList.add("hidden");
+  }
+}
+
+function forceCloseImageModal() {
   document.getElementById("imageModal").classList.add("hidden");
 }
