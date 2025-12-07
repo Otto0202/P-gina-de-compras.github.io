@@ -340,4 +340,3 @@ function updatePriceEmpanada() {
       label    // texto visible en el carrito
     );
   }
-</script>
