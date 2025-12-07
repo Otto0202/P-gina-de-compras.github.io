@@ -5,11 +5,11 @@ let selectedSeller = null;
 function selectSeller(name) {
   selectedSeller = name;
   document.getElementById('welcomeModal').style.display = 'none';
-  document.getElementById('alertModal').classList.remove('hidden');
+  
 }
 
 function closeAlertModal() {
-  document.getElementById('alertModal').style.display = 'none';
+  document.getElementById('welcomeModal').style.display = 'none';
 }
 
 function addToCart(productName, price, color = null) {
