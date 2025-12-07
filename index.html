@@ -11,7 +11,7 @@
       background-image: url('https://imgur.com/vjQBpbQ.jpg');
       background-size: cover;
       background-repeat: repeat;
-      background-attachment: scroll; /* 🔥 AHORA EL FONDO SE MUEVE */
+      background-attachment: scroll;
       background-position: center;
     }
   </style>
@@ -19,7 +19,7 @@
 
 <body class="bg-gray-100 bg-opacity-90 p-6">
 
-<!-- MODAL -->
+<!-- MODAL DE AVISO -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-lg text-center space-y-4 max-w-sm">
     <h2 class="text-xl font-bold">
@@ -29,6 +29,19 @@
       Aceptar
     </button>
   </div>
+</div>
+
+<!-- MODAL DE IMAGEN AMPLIADA -->
+<div id="imageModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[100]"
+     onclick="closeImageModal()">
+
+  <img id="modalImage" class="max-w-[90%] max-h-[90%] rounded shadow-lg">
+
+  <button onclick="closeImageModal()"
+          class="absolute top-5 right-5 text-white text-4xl font-bold">
+    ×
+  </button>
 </div>
 
 <div class="max-w-6xl mx-auto">
@@ -42,21 +55,26 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-    <!-- PRODUCTO -->
+    <!-- PRODUCTO 1 -->
     <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/XgEIdeN.jpg" class="w-full h-55 object-cover mb-2">
+      <img 
+        src="https://imgur.com/XgEIdeN.jpg"
+        class="w-full h-55 object-cover mb-2 cursor-pointer"
+        onclick="openImageModal(this.src)"
+      >
+
       <h2 class="text-xl font-semibold">Empanadas & Arepas rellenas</h2>
 
       <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
 
-      <select id="colorEmpanada" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+      <select id="colorEmpanada" onchange="updatePrice()"
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
         <option value="3000">Empanada</option>
         <option value="6000">Arepa Rellena</option>
         <option value="28000">Empanada x10</option>
         <option value="56000">Arepa Rellena x10</option>
       </select>
 
-      <!-- PRECIO DINÁMICO -->
       <p id="priceEmpanada" class="text-lg font-bold mt-2">$3.000</p>
 
       <button
