@@ -139,7 +139,7 @@ function checkout() {
   const encodedMessage = encodeURIComponent(message);
 
   let phoneNumber = selectedSeller === 'NOMBRE'
-    ? '57NUMERO1'
+    ? '57 323 9618378'
     : '57NUMERO2'; 
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
