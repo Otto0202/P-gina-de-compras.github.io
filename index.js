@@ -91,7 +91,7 @@ function updateCart() {
         </div>
         <div class="flex gap-2 mt-2">
           <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">-</button>
-          <input type="number" min="1" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
+          <input type="number" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
           <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
         </div>
       </div>`;
@@ -114,7 +114,6 @@ function updateAbono(p) {
     percent: p,
     abono: total * (p / 100),
     restante: total * (1 - p / 100),
-    comprobante: document.getElementById("comprobantePago").files.length > 0
   };
 
   document.getElementById("abonoInfo").innerHTML =
@@ -140,7 +139,6 @@ function checkout() {
 
   if (abonoInfo) {
     msg += `\n💰 Abono: ${abonoInfo.percent}%`;
-    msg += `\n📎 Comprobante adjunto`;
     msg += `\n💵 Restante: $${abonoInfo.restante.toLocaleString("es-CO")}`;
   }
 
