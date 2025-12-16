@@ -7,14 +7,42 @@ window.onload = () => {
   document.getElementById("welcomeModal").style.display = "flex";
 };
 
-/******** MODAL IMAGEN ********/
+/******** MODAL IMAGEN FULL ********/
 function openImage(src) {
-  document.getElementById("modalImage").src = src;
-  document.getElementById("imageModal").classList.remove("hidden");
+  const modal = document.getElementById("imageModal");
+  const img = document.getElementById("modalImage");
+  img.src = src;
+  modal.classList.remove("hidden");
 }
 
 function closeImageModal() {
   document.getElementById("imageModal").classList.add("hidden");
+}
+
+/******** MODAL ABONO ********/
+function handlePagoChange(v) {
+  if (v === "Abono") {
+    document.getElementById("abonoModal").classList.remove("hidden");
+    updateAbono(50);
+  }
+}
+
+function updateAbono(p) {
+  const total = cart.reduce((s, i) => s + i.qty * i.finalPrice, 0);
+  abonoInfo = {
+    percent: p,
+    abono: total * (p / 100),
+    restantePercent: 100 - p,
+    restante: total * (1 - p / 100)
+  };
+
+  document.getElementById("abonoInfo").innerHTML =
+    `Abono: ${abonoInfo.percent}% → $${abonoInfo.abono.toLocaleString("es-CO")}<br>
+     Restante: ${abonoInfo.restantePercent}% → $${abonoInfo.restante.toLocaleString("es-CO")}`;
+}
+
+function closeAbonoModal() {
+  document.getElementById("abonoModal").classList.add("hidden");
 }
 
 /******** CARRITO ********/
@@ -113,8 +141,8 @@ function updateCart() {
         <div class="flex items-center gap-2 mt-2">
           <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">−</button>
           <input type="number" min="1" value="${p.qty}"
-            onchange="updateQuantity(${i}, this.value)"
-            class="border w-20 text-center rounded">
+                 onchange="updateQuantity(${i}, this.value)"
+                 class="border w-20 text-center rounded">
           <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
         </div>
       </div>
@@ -125,42 +153,19 @@ function updateCart() {
     <p class="font-bold text-xl text-center mt-4">
       Total: $${total.toLocaleString("es-CO")}
     </p>
+
+    ${abonoInfo ? `
+      <div class="text-sm text-gray-600 mt-3">
+        <p>Abono: ${abonoInfo.percent}% → $${abonoInfo.abono.toLocaleString("es-CO")}</p>
+        <p>Restante: ${abonoInfo.restantePercent}% → $${abonoInfo.restante.toLocaleString("es-CO")}</p>
+      </div>
+    ` : ''}
   `;
-}
-
-/******** ABONO ********/
-function handlePagoChange(v) {
-  if (v === "Abono") {
-    document.getElementById("abonoModal").classList.remove("hidden");
-    updateAbono(50);
-  }
-}
-
-function updateAbono(p) {
-  const total = cart.reduce((s, i) => s + i.qty * i.finalPrice, 0);
-  abonoInfo = {
-    percent: p,
-    abono: total * (p / 100),
-    restantePercent: 100 - p,
-    restante: total * (1 - p / 100)
-  };
-
-  document.getElementById("abonoInfo").innerHTML =
-    `Abono: ${abonoInfo.percent}% → $${abonoInfo.abono.toLocaleString("es-CO")}<br>
-     Restante: ${abonoInfo.restantePercent}% → $${abonoInfo.restante.toLocaleString("es-CO")}`;
-}
-
-function closeAbonoModal() {
-  document.getElementById("abonoModal").classList.add("hidden");
 }
 
 /******** WHATSAPP ********/
 function checkout() {
   let msg = `Pedido ChiquiDetalles\n\n`;
-  msg += `👤 ${clienteNombre.value}\n`;
-  msg += `📍 ${clienteDireccion.value}\n`;
-  msg += `📅 ${fechaEntrega.value}\n`;
-  msg += `💳 ${tipoPago.value}\n\n`;
 
   cart.forEach(p => {
     msg += `- ${p.name} x${p.qty}\n`;
