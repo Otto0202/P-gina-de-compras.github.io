@@ -5,8 +5,23 @@ function closeAlertModal() {
 let cart = [];
 let orderData = {};
 
-// ================= CARRITO (TU LÓGICA ORIGINAL) =================
+// ================= IMÁGENES EN PANTALLA COMPLETA =================
+function openImageModal(src) {
+  document.getElementById("modalImage").src = src;
+  document.getElementById("imageModal").classList.remove("hidden");
+}
 
+function closeImageModal(e) {
+  if (e.target.id === "imageModal") {
+    document.getElementById("imageModal").classList.add("hidden");
+  }
+}
+
+function forceCloseImageModal() {
+  document.getElementById("imageModal").classList.add("hidden");
+}
+
+// ================= CARRITO ORIGINAL =================
 function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
 
@@ -62,8 +77,7 @@ function updateCart() {
   cartDiv.innerHTML += `<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
 }
 
-// ================= NUEVA LÓGICA =================
-
+// ================= ORDEN / PDF / WHATSAPP =================
 function openOrderModal() {
   if (cart.length === 0) {
     alert("Tu carrito está vacío");
@@ -116,7 +130,6 @@ function generatePDF() {
 
   html2pdf()
     .set({
-      margin: 10,
       filename: `Orden_Compra_${orderData.cotizacion}.pdf`,
       html2canvas: { scale: 2 },
       jsPDF: { format: "a4", orientation: "portrait" }
@@ -126,10 +139,10 @@ function generatePDF() {
 }
 
 function sendToWhatsApp() {
-  let msg = `Hola, adjunto orden de compra.\n\n`;
+  let msg = `Hola 👋, adjunto orden de compra en PDF.\n\n`;
   msg += `Cliente: ${orderData.client}\n`;
   msg += `Dirección: ${orderData.address}\n`;
-  msg += `Fecha entrega: ${orderData.date}\n\n`;
+  msg += `Fecha de entrega: ${orderData.date}\n\n`;
 
   let total = 0;
   cart.forEach(item => {
