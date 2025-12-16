@@ -15,13 +15,23 @@
       background-position: center;
     }
 
-    /* MINIATURAS DE PRODUCTO */
     .product-img {
       width: 100%;
-      height: 400px;           /* AJUSTA EL TAMAÑO AQUÍ */
-      object-fit: cover;       /* Recorta bonito */
+      height: 300px;
+      object-fit: cover;
       border-radius: 6px;
       cursor: pointer;
+    }
+
+    /* Animación para el ícono del precio por mayor */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .animate-pulse {
+      animation: pulse 1s infinite;
     }
   </style>
 </head>
@@ -40,22 +50,15 @@
   </div>
 </div>
 
-
 <!-- MODAL DE IMAGEN COMPLETA -->
 <div id="imageModal"
      class="hidden fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-[200]"
      onclick="closeImageModal(event)">
-
   <img id="modalImage"
        class="max-w-[95%] max-h-[95%] rounded shadow-2xl object-contain">
-
   <button onclick="forceCloseImageModal()"
-          class="absolute top-5 right-5 text-white text-5xl font-bold">
-    ×
-  </button>
+          class="absolute top-5 right-5 text-white text-5xl font-bold">×</button>
 </div>
-
-
 
 <div class="max-w-6xl mx-auto">
   <div class="flex items-center justify-center mb-6">
@@ -63,183 +66,139 @@
   </div>
 
   <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
-
   <h2 class="text-3xl font-bold text-center mb-4">Comidas</h2>
-
-
-
 
   <!-- GRID DE PRODUCTOS -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
     <!-- PRODUCTO 1 - Empanadas -->
     <div class="bg-white p-4 rounded shadow">
-
-      <img 
-        src="https://imgur.com/XgEIdeN.jpg"
-        class="product-img"
-        onclick="openImageModal(this.src)"
-      >
-
-      <h2 class="text-xl font-semibold mt-2">Empanadas & Arepas rellenas</h2>
-
+      <img src="https://imgur.com/XgEIdeN.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Empanadas medianas</h2>
       <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
-
-      <select id="colorEmpanada" onchange="updatePrice()"
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+      <select id="colorEmpanada" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
         <option value="2500">Empanada mediana (unidad)</option>
-        <option value="6000">Arepa Rellena</option>
-        <option value="60000">Empanada mediana x 30</option>
-        <option value="56000">Arepa Rellena x10</option>
+        <option value="2000">Empanadas medianas por mayor (mayor a 30 unidades)</option>
       </select>
-
       <p id="priceEmpanada" class="text-lg font-bold mt-2">$2.500</p>
-
-      <button
-        onclick="addToCart(
-          'Empanadas & Arepas',
-          parseInt(document.getElementById('colorEmpanada').value),
-          document.getElementById('colorEmpanada').options[document.getElementById('colorEmpanada').selectedIndex].text
-        )"
-        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-        Agregar al carrito
-      </button>
-
+      <button onclick="addToCart('Empanadas medianas', 2500)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
     </div>
-    <!-- PRODUCTO DE UNA SOLA OPCIÓN -->
-<div class="bg-white p-4 rounded shadow">
 
-  <img 
-    src="https://imgur.com/YVId4rm.jpg"
-    class="product-img"
-    onclick="openImageModal(this.src)"
-  >
-
-  <h2 class="text-xl font-semibold mt-2">Buñuelosx20</h2>
-
-  <p class="text-lg font-bold mt-2">$5.000</p>
-
-  <button
-    onclick="addToCart('Buñuelosx20', 5000, 'Único')"
-    class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-    Agregar al carrito
-  </button>
-
-</div>
-      <!-- PRODUCTO DE UNA SOLA OPCIÓN -->
-<div class="bg-white p-4 rounded shadow">
-
-  <img 
-    src="https://imgur.com/3uq6mlL.jpg"
-    class="product-img"
-    onclick="openImageModal(this.src)"
-  >
-
-  <h2 class="text-xl font-semibold mt-2">Buñuelos + Natilla + Mermelada</h2>
-
-  <p class="text-lg font-bold mt-2">$4.500</p>
-
-  <button
-    onclick="addToCart('Buñuelos + Natilla + Mermelada', 4500, 'Único')"
-    class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-    Agregar al carrito
-  </button>
-
-</div>
-         <!-- PRODUCTO DE UNA SOLA OPCIÓN -->
-<div class="bg-white p-4 rounded shadow">
-
-  <img 
-    src="https://imgur.com/4NF7TOu.jpg"
-    class="product-img"
-    onclick="openImageModal(this.src)"
-  >
-
-  <h2 class="text-xl font-semibold mt-2">Arroz con leche</h2>
-
-  <p class="text-lg font-bold mt-2">$4.500</p>
-
-  <button
-    onclick="addToCart('Arroz con leche', 4500, 'Único')"
-    class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-    Agregar al carrito
-  </button>
-
-</div>
-     <!-- PRODUCTO DE UNA SOLA OPCIÓN -->
-<div class="bg-white p-4 rounded shadow">
-
-  <img 
-    src="https://imgur.com/owsoe8H.jpg"
-    class="product-img"
-    onclick="openImageModal(this.src)"
-  >
-
-  <h2 class="text-xl font-semibold mt-2">Gelatina Mosaico</h2>
-
-  <p class="text-lg font-bold mt-2">$4.500</p>
-
-  <button
-    onclick="addToCart('Gelatina Mosaico', 4500, 'Único')"
-    class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-    Agregar al carrito
-  </button>
-
-</div>
-    <!-- EJEMPLO: PRODUCTO 2 (tu imagen de sándwich) -->
+    <!-- PRODUCTO 2 - Burritos salados -->
     <div class="bg-white p-4 rounded shadow">
-
-      <img 
-        src="https://imgur.com/BOyqyCZ.jpg" 
-        class="product-img"
-        onclick="openImageModal(this.src)"
-      >
-
-      <h2 class="text-xl font-semibold mt-2">Sándwich Especial + Papas</h2>
-
+      <img src="https://imgur.com/6bpqV4J.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Burritos salados medianos</h2>
       <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
-
-      <select id="colorSandwich" onchange="updatePriceSandwich()"
-              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-        <option value="15000">Sándwich Solo</option>
-        <option value="20000">Sándwich + Papas</option>
-        <option value="35000">Combo Doble</option>
+      <select id="colorBurrito" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="5000">Burritos salados medianos (unidad)</option>
+        <option value="4500">Burritos salados por mayor (mayor a 30 unidades)</option>
       </select>
-
-      <p id="priceSandwich" class="text-lg font-bold mt-2">$15.000</p>
-
-      <button
-        onclick="addToCart(
-          'Sándwich Especial',
-          parseInt(document.getElementById('colorSandwich').value),
-          document.getElementById('colorSandwich').options[document.getElementById('colorSandwich').selectedIndex].text
-        )"
-        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
-        Agregar al carrito
-      </button>
-
+      <p id="priceBurrito" class="text-lg font-bold mt-2">$5.000</p>
+      <button onclick="addToCart('Burritos salados medianos', 5000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
     </div>
 
- 
+    <!-- PRODUCTO 3 - Mini perros calientes -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/nAYhSY5.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Mini perros calientes</h2>
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+      <select id="colorPerro" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="5000">Mini perros calientes (unidad)</option>
+        <option value="4500">Mini perros calientes por mayor (mayor a 30 unidades)</option>
+      </select>
+      <p id="pricePerro" class="text-lg font-bold mt-2">$5.000</p>
+      <button onclick="addToCart('Mini perros calientes', 5000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
 
+    <!-- PRODUCTO 4 - Mini hamburguesas -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/3uq6mlL.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Mini hamburguesas</h2>
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+      <select id="colorHamburguesa" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="6000">Mini hamburguesas (unidad)</option>
+        <option value="5500">Mini hamburguesas por mayor (mayor a 30 unidades)</option>
+      </select>
+      <p id="priceHamburguesa" class="text-lg font-bold mt-2">$6.000</p>
+      <button onclick="addToCart('Mini hamburguesas', 6000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
 
+    <!-- PRODUCTO 5 - Sandwich especial -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/BOyqyCZ.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Sándwich especial + Papas</h2>
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+      <select id="colorSandwich" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="10000">Sándwich especial solo</option>
+        <option value="9000">Sándwich especial por mayor (mayor a 30 unidades)</option>
+      </select>
+      <p id="priceSandwich" class="text-lg font-bold mt-2">$10.000</p>
+      <button onclick="addToCart('Sándwich especial', 10000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
 
-  </div> <!-- fin grid -->
+    <!-- PRODUCTO 6 - Mini sandwich -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/zch7xqM.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Mini sandwich</h2>
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+      <select id="colorMiniSandwich" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="4000">Mini sandwich (unidad)</option>
+        <option value="3500">Mini sandwich por mayor (mayor a 30 unidades)</option>
+      </select>
+      <p id="priceMiniSandwich" class="text-lg font-bold mt-2">$4.000</p>
+      <button onclick="addToCart('Mini sandwich', 4000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
 
+    <!-- PRODUCTO 7 - Deditos de queso -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/WUy2yMA.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Deditos de queso</h2>
+      <p class="text-lg font-bold mt-2">$2.500</p>
+      <button onclick="addToCart('Deditos de queso', 2500)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
 
+    <!-- PRODUCTO 8 - Nuggets de pollo -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/BLlQYEB.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Nuggets de pollo</h2>
+      <p class="text-lg font-bold mt-2">$2.500</p>
+      <button onclick="addToCart('Nuggets de pollo', 2500)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
+
+    <!-- PRODUCTO 9 - Mini arepas rellenas -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/q6Cm7j9.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-semibold mt-2">Mini arepas rellenas</h2>
+      <label class="block mt-2 text-sm font-medium text-gray-700">Seleccionar:</label>
+      <select id="colorArepas" onchange="updatePrice()" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        <option value="5000">Mini arepas rellenas (unidad)</option>
+        <option value="4500">Mini arepas rellenas por mayor (mayor a 30 unidades)</option>
+      </select>
+      <p id="priceArepas" class="text-lg font-bold mt-2">$5.000</p>
+      <button onclick="addToCart('Mini arepas rellenas', 5000)" class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">Agregar al carrito</button>
+    </div>
+
+  </div> <!-- Fin Grid -->
+
+  <!-- DATOS DEL CLIENTE -->
+  <div class="bg-white p-4 rounded shadow mt-8 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold mb-4">Datos del Pedido</h2>
+    <input id="clienteNombre" placeholder="Nombre completo" class="w-full border p-2 mb-2 rounded"/>
+    <input id="clienteDireccion" placeholder="Dirección de entrega" class="w-full border p-2 mb-2 rounded"/>
+    <input id="fechaEntrega" type="date" class="w-full border p-2 mb-2 rounded"/>
+    <select id="tipoPago" class="w-full border p-2 rounded">
+      <option value="Abono">Abono</option>
+      <option value="Pago completo">Pago completo</option>
+    </select>
+  </div>
 
   <!-- CARRITO -->
   <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold mb-4 text-center">Carrito de Compras</h1>
-
     <div class="bg-white p-4 rounded shadow">
       <h2 class="text-2xl font-bold mb-4">Carrito</h2>
-
       <div id="cart"><p>No hay productos en el carrito.</p></div>
-
-      <button onclick="checkout()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded w-full">
-        Pagar por WhatsApp
-      </button>
+      <button onclick="checkout()" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded w-full">Pagar por WhatsApp</button>
     </div>
   </div>
 </div>
