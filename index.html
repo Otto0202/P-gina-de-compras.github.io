@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChiquiDetalles</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-
-  <!-- HTML → PDF -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
-    body {
-      background-image: url('https://imgur.com/vjQBpbQ.jpg');
-      background-size: cover;
-      background-repeat: repeat;
-      background-position: center;
+    body{
+      background-image:url("https://imgur.com/vjQBpbQ.jpg");
+      background-size:cover;
+      background-repeat:repeat;
     }
-
-    .product-img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-      border-radius: 6px;
-      cursor: pointer;
+    .product-img{
+      width:100%;
+      height:380px;
+      object-fit:cover;
+      border-radius:6px;
+      cursor:pointer;
     }
   </style>
 </head>
@@ -32,118 +28,132 @@
 
 <!-- MODAL AVISO -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg text-center space-y-4 max-w-sm">
-    <h2 class="text-xl font-bold">
-      El precio del domicilio varía dependiendo del sector o zona de entrega
-    </h2>
-    <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-4 py-2 rounded">
-      Aceptar
-    </button>
+  <div class="bg-white p-6 rounded text-center space-y-4">
+    <p class="font-bold">El precio del domicilio varía según la zona</p>
+    <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-4 py-2 rounded">Aceptar</button>
   </div>
 </div>
 
-<!-- MODAL IMAGEN COMPLETA -->
-<div id="imageModal"
-  class="hidden fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50"
-  onclick="closeImageModal(event)">
-
-  <img id="modalImage"
-    class="max-w-[95%] max-h-[95%] rounded shadow-2xl object-contain">
-
+<!-- MODAL IMAGEN -->
+<div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+     onclick="closeImageModal(event)">
+  <img id="modalImage" class="max-w-[95%] max-h-[95%] rounded shadow-xl">
   <button onclick="forceCloseImageModal()"
-    class="absolute top-5 right-5 text-white text-5xl font-bold">
-    ×
-  </button>
+    class="absolute top-5 right-5 text-white text-5xl font-bold">×</button>
 </div>
 
-<!-- MODAL DATOS CLIENTE -->
-<div id="orderModal"
-  class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg w-full max-w-md space-y-4">
-    <h2 class="text-xl font-bold text-center">Datos de la Orden</h2>
-
-    <input id="clientName" placeholder="Nombre del cliente" class="w-full border p-2 rounded">
+<!-- MODAL DATOS -->
+<div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded w-full max-w-md space-y-4">
+    <h2 class="text-xl font-bold text-center">Datos del pedido</h2>
+    <input id="clientName" class="w-full border p-2 rounded" placeholder="Nombre del cliente">
     <input id="deliveryDate" type="date" class="w-full border p-2 rounded">
-    <textarea id="deliveryAddress" placeholder="Dirección de entrega" class="w-full border p-2 rounded"></textarea>
-
-    <button onclick="confirmOrder()"
-      class="bg-green-600 text-white px-4 py-2 rounded w-full">
-      Generar orden y continuar
+    <textarea id="deliveryAddress" class="w-full border p-2 rounded" placeholder="Dirección"></textarea>
+    <button onclick="confirmOrder()" class="bg-green-600 text-white px-4 py-2 rounded w-full">
+      Generar orden
     </button>
   </div>
 </div>
 
-<!-- PLANTILLA PDF (FUERA DE PANTALLA, NO display:none) -->
-<div id="pdfTemplate"
-  style="position:absolute; left:-9999px; top:0; font-family:Arial; width:800px; padding:30px">
+<!-- MODAL INFO PDF -->
+<div id="pdfInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded w-full max-w-md text-center space-y-4">
+    <h2 class="text-xl font-bold">Orden generada</h2>
+    <p>📄 El PDF se descargó.</p>
+    <p>📎 Adjunta el PDF en WhatsApp para continuar.</p>
+    <button onclick="closePdfInfoModal()" class="bg-green-600 text-white px-4 py-2 rounded w-full">
+      Ir a WhatsApp
+    </button>
+  </div>
+</div>
 
-  <h2 style="text-align:center;">ORDEN COMPRA</h2>
+<!-- PLANTILLA PDF -->
+<div id="pdfTemplate" style="position:absolute;left:-9999px;top:0;width:800px;font-family:Arial;padding:30px">
+  <h2 style="text-align:center;">ORDEN DE COMPRA</h2>
+  <p><strong>Cliente:</strong> <span id="pdfCliente"></span></p>
+  <p><strong>Dirección:</strong> <span id="pdfDireccion"></span></p>
+  <p><strong>Fecha:</strong> <span id="pdfFecha"></span></p>
 
-  <table width="100%" style="margin-top:20px; font-size:13px">
-    <tr>
-      <td><strong>Cliente:</strong> <span id="pdfCliente"></span></td>
-      <td><strong>Cotización No:</strong> <span id="pdfCotizacion"></span></td>
-    </tr>
-    <tr>
-      <td><strong>Dirección:</strong> <span id="pdfDireccion"></span></td>
-      <td><strong>Fecha entrega:</strong> <span id="pdfFecha"></span></td>
-    </tr>
-  </table>
-
-  <table width="100%" border="1" cellspacing="0" cellpadding="6"
-    style="margin-top:20px; font-size:12px">
+  <table width="100%" border="1" cellpadding="6" style="margin-top:20px">
     <thead>
       <tr>
-        <th>PRODUCTO / DESCRIPCIÓN</th>
-        <th>CANT</th>
-        <th>COSTO</th>
+        <th>Producto</th><th>Cant</th><th>Costo</th>
       </tr>
     </thead>
     <tbody id="pdfProductos"></tbody>
   </table>
 
-  <h3 style="text-align:right; margin-top:20px">
+  <h3 style="text-align:right;margin-top:20px">
     TOTAL: $<span id="pdfTotal"></span>
   </h3>
-
-  <p style="font-size:11px; margin-top:30px">
-    Forma de pago: 50% para agendar y 50% con la entrega<br>
-    Medios de pago: Nequi / Daviplata 3123242190
-  </p>
-
-  <p style="font-size:11px">
-    ChiquiDetalles con amor<br>
-    NIT: 1000184069-8<br>
-    Tel: 3162378139
-  </p>
 </div>
 
-<!-- ===================== CONTENIDO ORIGINAL ===================== -->
-<!-- ⚠️ AQUÍ ESTÁN TUS PRODUCTOS EXACTAMENTE COMO LOS TENÍAS -->
+<!-- ================= PRODUCTOS ================= -->
 
 <div class="max-w-6xl mx-auto">
-  <div class="flex items-center justify-center mb-6">
-    <img src="https://imgur.com/pV0dmDq.jpg" class="w-32 h-32">
+  <h1 class="text-4xl font-bold text-center mb-6">ChiquiDetalles</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Empanadas -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/XgEIdeN.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-bold mt-2">Empanadas / Arepas</h2>
+      <select id="empanadaSelect" class="border p-2 w-full mt-2" onchange="updatePrice()">
+        <option value="2500">Empanada unidad</option>
+        <option value="6000">Arepa rellena</option>
+        <option value="60000">Empanadas x30</option>
+      </select>
+      <p id="priceEmpanada" class="font-bold mt-2">$2.500</p>
+      <button onclick="addToCart('Empanadas', parseInt(empanadaSelect.value), empanadaSelect.options[empanadaSelect.selectedIndex].text)"
+        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
+    </div>
+
+    <!-- Buñuelos -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/YVId4rm.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-bold mt-2">Buñuelos x20</h2>
+      <p class="font-bold">$5.000</p>
+      <button onclick="addToCart('Buñuelos x20',5000)"
+        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
+    </div>
+
+    <!-- Natilla -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/3uq6mlL.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-bold mt-2">Natilla + Buñuelos</h2>
+      <p class="font-bold">$4.500</p>
+      <button onclick="addToCart('Natilla + Buñuelos',4500)"
+        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
+    </div>
+
+    <!-- Arroz -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/4NF7TOu.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-bold mt-2">Arroz con leche</h2>
+      <p class="font-bold">$4.500</p>
+      <button onclick="addToCart('Arroz con leche',4500)"
+        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
+    </div>
+
+    <!-- Gelatina -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/owsoe8H.jpg" class="product-img" onclick="openImageModal(this.src)">
+      <h2 class="text-xl font-bold mt-2">Gelatina mosaico</h2>
+      <p class="font-bold">$4.500</p>
+      <button onclick="addToCart('Gelatina mosaico',4500)"
+        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
+    </div>
+
   </div>
 
-  <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
-  <h2 class="text-3xl font-bold text-center mb-4">Comidas</h2>
-
-  <!-- AQUÍ SIGUE TU GRID DE PRODUCTOS SIN MODIFICAR -->
-  <!-- (idéntico al que enviaste originalmente) -->
-
   <!-- CARRITO -->
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold mb-4 text-center">Carrito de Compras</h1>
-
-    <div class="bg-white p-4 rounded shadow">
-      <div id="cart"><p>No hay productos en el carrito.</p></div>
-
-      <button onclick="openOrderModal()"
-        class="bg-blue-600 text-white px-4 py-2 mt-4 rounded w-full">
-        Continuar pedido
-      </button>
-    </div>
+  <div class="bg-white p-4 rounded shadow mt-8">
+    <h2 class="text-2xl font-bold mb-4">Carrito</h2>
+    <div id="cart"></div>
+    <button onclick="openOrderModal()" class="bg-blue-600 text-white px-4 py-2 rounded w-full mt-4">
+      Continuar pedido
+    </button>
   </div>
 </div>
 
