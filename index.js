@@ -1,13 +1,10 @@
 /******** MODAL DOMICILIO ********/
 function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
-  localStorage.setItem("modalClosed", "true");
 }
 
 window.onload = () => {
-  if (localStorage.getItem("modalClosed") === "true") {
-    document.getElementById("welcomeModal").style.display = "none";
-  }
+  document.getElementById("welcomeModal").style.display = "flex";
 };
 
 /******** CARRITO ********/
@@ -91,7 +88,7 @@ function updateCart() {
         </div>
         <div class="flex gap-2 mt-2">
           <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">-</button>
-          <input type="number" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
+          <input type="number" min="1" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
           <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
         </div>
       </div>`;
@@ -113,12 +110,13 @@ function updateAbono(p) {
   abonoInfo = {
     percent: p,
     abono: total * (p / 100),
+    restantePercent: 100 - p,
     restante: total * (1 - p / 100),
   };
 
   document.getElementById("abonoInfo").innerHTML =
-    `Abono ${p}%: $${abonoInfo.abono.toLocaleString("es-CO")}<br>
-     Restante: $${abonoInfo.restante.toLocaleString("es-CO")}`;
+    `Abono: ${abonoInfo.percent}% → $${abonoInfo.abono.toLocaleString("es-CO")}<br>
+     Restante: ${abonoInfo.restantePercent}% → $${abonoInfo.restante.toLocaleString("es-CO")}`;
 }
 
 function closeAbonoModal() {
@@ -138,8 +136,8 @@ function checkout() {
   });
 
   if (abonoInfo) {
-    msg += `\n💰 Abono: ${abonoInfo.percent}%`;
-    msg += `\n💵 Restante: $${abonoInfo.restante.toLocaleString("es-CO")}`;
+    msg += `\n💰 Abono: ${abonoInfo.percent}% ($${abonoInfo.abono.toLocaleString("es-CO")})`;
+    msg += `\n💵 Restante: ${abonoInfo.restantePercent}% ($${abonoInfo.restante.toLocaleString("es-CO")})`;
   }
 
   window.open(
