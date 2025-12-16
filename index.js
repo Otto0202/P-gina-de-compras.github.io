@@ -1,18 +1,18 @@
 let cart = [];
 
 // ===============================
-// CONFIGURACIÓN DE PRODUCTOS
+// CONFIGURACIÓN DE MAYORISTAS
 // ===============================
 const wholesaleRules = {
-  "Empanadas medianas": { limit: 30, wholesale: 2000, unit: 2500 },
-  "Burritos salados medianos": { limit: 30, wholesale: 4500, unit: 5000 },
-  "Mini perros calientes": { limit: 30, wholesale: 4500, unit: 5000 },
-  "Mini hamburguesas": { limit: 30, wholesale: 5500, unit: 6000 },
-  "Sandwich especial": { limit: 30, wholesale: 9000, unit: 10000 },
-  "Mini sandwich": { limit: 30, wholesale: 3500, unit: 4000 },
-  "Mini arepas rellenas": { limit: 30, wholesale: 4500, unit: 5000 },
-  "Medallones de pechuga rellena": { limit: 30, wholesale: 6400, unit: 7000 },
-  "Natilla + 3 buñuelos": { limit: 50, wholesale: 4500, unit: 5000 }
+  "Empanadas medianas": { limit: 30, unit: 2500, wholesale: 2000 },
+  "Burritos salados medianos": { limit: 30, unit: 5000, wholesale: 4500 },
+  "Mini perros calientes": { limit: 30, unit: 5000, wholesale: 4500 },
+  "Mini hamburguesas": { limit: 30, unit: 6000, wholesale: 5500 },
+  "Sandwich especial": { limit: 30, unit: 10000, wholesale: 9000 },
+  "Mini sandwich": { limit: 30, unit: 4000, wholesale: 3500 },
+  "Mini arepas rellenas": { limit: 30, unit: 5000, wholesale: 4500 },
+  "Medallones de pechuga rellena": { limit: 30, unit: 7000, wholesale: 6400 },
+  "Natilla + 3 buñuelos": { limit: 50, unit: 5000, wholesale: 4500 }
 };
 
 // ===============================
@@ -41,6 +41,7 @@ function addToCart(name, unitPrice) {
 // ===============================
 function applyWholesale(product) {
   const rule = wholesaleRules[product.name];
+
   if (rule && product.qty >= rule.limit) {
     product.finalPrice = rule.wholesale;
   } else {
@@ -63,27 +64,62 @@ function updateCart() {
   let total = 0;
 
   cart.forEach((item, index) => {
+    const rule = wholesaleRules[item.name];
+    const isWholesale = rule && item.qty >= rule.limit;
     const subtotal = item.qty * item.finalPrice;
     total += subtotal;
 
-    let div = document.createElement("div");
-    div.className = "mb-4 p-2 border-b";
+    let mayorBadge = "";
+    let faltanMsg = "";
+    let precioUnitarioHtml = "";
 
-    let mayorText = "";
-    const rule = wholesaleRules[item.name];
-    if (rule && item.qty >= rule.limit) {
-      mayorText = ` (Precio por mayor desde ${rule.limit})`;
+    if (rule) {
+      if (isWholesale) {
+        mayorBadge = `
+          <span class="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded mt-1 animate-pulse">
+            🔥 Precio por mayor aplicado
+          </span>
+        `;
+
+        precioUnitarioHtml = `
+          <span class="text-xs text-gray-500 line-through">
+            $${rule.unit.toLocaleString("es-CO")}
+          </span>
+        `;
+      } else {
+        const faltan = rule.limit - item.qty;
+        faltanMsg = `
+          <span class="text-xs text-orange-600 font-semibold">
+            ⚠️ Faltan ${faltan} unidades para precio por mayor
+          </span>
+        `;
+      }
     }
 
+    let div = document.createElement("div");
+    div.className = "mb-4 p-3 border rounded";
+
     div.innerHTML = `
-      <p class="font-bold">${item.name}${mayorText}</p>
-      <div class="flex justify-between items-center">
-        <span>${item.qty} x $${item.finalPrice.toLocaleString("es-CO")}</span>
-        <span>$${subtotal.toLocaleString("es-CO")}</span>
+      <p class="font-bold text-lg">${item.name}</p>
+
+      ${mayorBadge}
+      ${faltanMsg}
+
+      <div class="flex justify-between items-center mt-2">
+        <div class="flex flex-col">
+          ${precioUnitarioHtml}
+          <span class="font-semibold">
+            ${item.qty} x $${item.finalPrice.toLocaleString("es-CO")}
+          </span>
+        </div>
+        <span class="font-bold">$${subtotal.toLocaleString("es-CO")}</span>
       </div>
+
       <div class="flex gap-2 mt-2">
-        <button class="bg-green-500 text-white px-2 rounded" onclick="addOne(${index})">+</button>
-        <button class="bg-red-500 text-white px-2 rounded" onclick="removeOne(${index})">-</button>
+        <button class="bg-green-500 text-white px-3 py-1 rounded"
+          onclick="addOne(${index})">+</button>
+        <button class="bg-red-500 text-white px-3 py-1 rounded"
+          onclick="removeOne(${index})">-</button>
       </div>
     `;
 
@@ -91,7 +127,7 @@ function updateCart() {
   });
 
   cartDiv.innerHTML += `
-    <div class="font-bold mt-4 text-xl">
+    <div class="font-bold mt-4 text-xl text-center">
       Total: $${total.toLocaleString("es-CO")}
     </div>
   `;
@@ -123,15 +159,15 @@ function checkout() {
   const pago = document.getElementById("tipoPago").value;
 
   if (!nombre || !direccion || !fecha) {
-    alert("Por favor completa todos los datos");
+    alert("Por favor completa todos los datos del pedido");
     return;
   }
 
-  let mensaje = `Hola, quiero hacer un pedido:\n\n`;
+  let mensaje = `Hola, quiero realizar un pedido:\n\n`;
   mensaje += `👤 Nombre: ${nombre}\n`;
   mensaje += `📍 Dirección: ${direccion}\n`;
   mensaje += `📅 Fecha de entrega: ${fecha}\n`;
-  mensaje += `💰 Pago: ${pago}\n\n`;
+  mensaje += `💳 Pago: ${pago}\n\n`;
   mensaje += `🛒 Pedido:\n`;
 
   let total = 0;
