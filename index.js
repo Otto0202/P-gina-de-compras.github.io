@@ -7,13 +7,15 @@ function closeAlertModal(){
 
 // IMÁGENES
 function openImageModal(src){
-  modalImage.src=src;
+  modalImage.src = src;
   imageModal.classList.remove("hidden");
 }
 function closeImageModal(e){
   if(e.target.id==="imageModal") imageModal.classList.add("hidden");
 }
-function forceCloseImageModal(){ imageModal.classList.add("hidden"); }
+function forceCloseImageModal(){
+  imageModal.classList.add("hidden");
+}
 
 // PRECIOS
 function updatePrice(){
@@ -22,7 +24,7 @@ function updatePrice(){
 
 // CARRITO
 function addToCart(name,price,option="Único"){
-  let item=cart.find(p=>p.name===name);
+  let item = cart.find(p=>p.name===name);
   if(!item){ item={name,options:{}}; cart.push(item); }
   if(!item.options[option]) item.options[option]={qty:1,price};
   else item.options[option].qty++;
@@ -30,11 +32,11 @@ function addToCart(name,price,option="Único"){
 }
 
 function updateCart(){
-  cartDiv=document.getElementById("cart");
+  const cartDiv=document.getElementById("cart");
   cartDiv.innerHTML="";
   let total=0;
 
-  cart.forEach((item,i)=>{
+  cart.forEach(item=>{
     let d=document.createElement("div");
     d.innerHTML=`<strong>${item.name}</strong>`;
     Object.entries(item.options).forEach(([op,data])=>{
@@ -62,8 +64,9 @@ function confirmOrder(){
   orderData.client=clientName.value;
   orderData.date=deliveryDate.value;
   orderData.address=deliveryAddress.value;
+
   if(!orderData.client||!orderData.date||!orderData.address)
-    return alert("Completa los datos");
+    return alert("Completa todos los datos");
 
   generatePDF();
   orderModal.classList.add("hidden");
@@ -75,8 +78,10 @@ function closePdfInfoModal(){
   sendToWhatsApp();
 }
 
-// PDF
+// PDF (CORREGIDO)
 function generatePDF(){
+  const pdf=document.getElementById("pdfTemplate");
+
   pdfCliente.textContent=orderData.client;
   pdfDireccion.textContent=orderData.address;
   pdfFecha.textContent=orderData.date;
@@ -91,14 +96,28 @@ function generatePDF(){
       pdfProductos.innerHTML+=`
         <tr>
           <td>${item.name} (${op})</td>
-          <td>${data.qty}</td>
-          <td>$${sub.toLocaleString("es-CO")}</td>
+          <td align="center">${data.qty}</td>
+          <td align="right">$${sub.toLocaleString("es-CO")}</td>
         </tr>`;
     });
   });
 
   pdfTotal.textContent=total.toLocaleString("es-CO");
-  html2pdf().from(pdfTemplate).save("Orden_Compra.pdf");
+
+  pdf.style.visibility="visible";
+
+  setTimeout(()=>{
+    html2pdf()
+      .set({
+        margin:10,
+        filename:"Orden_Compra.pdf",
+        html2canvas:{scale:2,useCORS:true},
+        jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}
+      })
+      .from(pdf)
+      .save()
+      .then(()=> pdf.style.visibility="hidden");
+  },100);
 }
 
 // WHATSAPP
