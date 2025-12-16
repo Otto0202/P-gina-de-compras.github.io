@@ -1,34 +1,16 @@
-/********************************
- * MODAL DOMICILIO
- ********************************/
+/******** MODAL DOMICILIO ********/
 function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
   localStorage.setItem("modalClosed", "true");
 }
 
-window.onload = function () {
+window.onload = () => {
   if (localStorage.getItem("modalClosed") === "true") {
     document.getElementById("welcomeModal").style.display = "none";
   }
 };
 
-/********************************
- * MODAL IMAGEN
- ********************************/
-function openImageModal(src) {
-  document.getElementById("modalImage").src = src;
-  document.getElementById("imageModal").classList.remove("hidden");
-}
-
-function closeImageModal(e) {
-  if (e.target.id === "imageModal") {
-    document.getElementById("imageModal").classList.add("hidden");
-  }
-}
-
-/********************************
- * CARRITO
- ********************************/
+/******** CARRITO ********/
 let cart = [];
 let abonoInfo = null;
 
@@ -45,104 +27,125 @@ const wholesaleRules = {
 };
 
 function addToCart(name, price) {
-  let product = cart.find(p => p.name === name);
-  if (!product) {
-    product = { name, qty: 0, unitPrice: price, finalPrice: price };
-    cart.push(product);
+  let p = cart.find(i => i.name === name);
+  if (!p) {
+    p = { name, qty: 0, unitPrice: price, finalPrice: price };
+    cart.push(p);
   }
-  product.qty++;
-  applyWholesale(product);
+  p.qty++;
+  applyWholesale(p);
   updateCart();
 }
 
-function applyWholesale(product) {
-  const rule = wholesaleRules[product.name];
-  product.finalPrice =
-    rule && product.qty >= rule.limit ? rule.wholesale : product.unitPrice;
+function applyWholesale(p) {
+  const r = wholesaleRules[p.name];
+  p.finalPrice = r && p.qty >= r.limit ? r.wholesale : p.unitPrice;
 }
 
-function updateQuantity(index, value) {
-  cart[index].qty = Math.max(1, parseInt(value) || 1);
-  applyWholesale(cart[index]);
+function updateQuantity(i, val) {
+  cart[i].qty = Math.max(1, parseInt(val));
+  applyWholesale(cart[i]);
+  updateCart();
+}
+
+function addOne(i) {
+  cart[i].qty++;
+  applyWholesale(cart[i]);
+  updateCart();
+}
+
+function removeOne(i) {
+  cart[i].qty--;
+  if (cart[i].qty <= 0) cart.splice(i, 1);
+  else applyWholesale(cart[i]);
   updateCart();
 }
 
 function updateCart() {
-  const cartDiv = document.getElementById("cart");
-  cartDiv.innerHTML = "";
+  const div = document.getElementById("cart");
+  div.innerHTML = "";
   let total = 0;
 
-  cart.forEach((item, index) => {
-    const rule = wholesaleRules[item.name];
-    const isWholesale = rule && item.qty >= rule.limit;
-    const subtotal = item.qty * item.finalPrice;
+  cart.forEach((p, i) => {
+    const rule = wholesaleRules[p.name];
+    const isWholesale = rule && p.qty >= rule.limit;
+    const subtotal = p.qty * p.finalPrice;
     total += subtotal;
 
-    cartDiv.innerHTML += `
+    div.innerHTML += `
       <div class="border p-3 mb-3 rounded">
-        <p class="font-bold">${item.name}</p>
-        ${isWholesale ? `<span class="text-green-700 text-xs animate-pulse">🔥 Precio por mayor aplicado</span>` : rule ? `<span class="text-orange-600 text-xs">Faltan ${rule.limit - item.qty}</span>` : ""}
+        <p class="font-bold">${p.name}</p>
+        ${
+          rule
+            ? isWholesale
+              ? `<span class="text-green-700 text-xs animate-pulse">🔥 Precio por mayor aplicado</span>`
+              : `<span class="text-orange-600 text-xs">Faltan ${rule.limit - p.qty} unidades para precio por mayor</span>`
+            : ""
+        }
         <div class="flex justify-between items-center mt-2">
-          <input type="number" min="1" value="${item.qty}"
-            onchange="updateQuantity(${index}, this.value)"
-            class="border p-1 w-20 rounded"/>
-          <span>$${subtotal.toLocaleString("es-CO")}</span>
+          <div>
+            ${isWholesale && rule ? `<span class="line-through text-xs">$${rule.unit}</span><br>` : ""}
+            <span>${p.qty} x $${p.finalPrice.toLocaleString("es-CO")}</span>
+          </div>
+          <span class="font-bold">$${subtotal.toLocaleString("es-CO")}</span>
         </div>
-      </div>
-    `;
+        <div class="flex gap-2 mt-2">
+          <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">-</button>
+          <input type="number" min="1" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
+          <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
+        </div>
+      </div>`;
   });
 
-  cartDiv.innerHTML += `<p class="font-bold text-xl">Total: $${total.toLocaleString("es-CO")}</p>`;
+  div.innerHTML += `<p class="font-bold text-xl text-center">Total: $${total.toLocaleString("es-CO")}</p>`;
 }
 
-/********************************
- * ABONO
- ********************************/
-function handlePagoChange(value) {
-  if (value === "Abono") {
+/******** ABONO ********/
+function handlePagoChange(v) {
+  if (v === "Abono") {
     document.getElementById("abonoModal").classList.remove("hidden");
     updateAbono(50);
   }
 }
 
-function updateAbono(percent) {
-  let total = cart.reduce((s, i) => s + i.qty * i.finalPrice, 0);
-  let abono = total * (percent / 100);
+function updateAbono(p) {
+  const total = cart.reduce((s, i) => s + i.qty * i.finalPrice, 0);
   abonoInfo = {
-    percent,
-    abono,
-    restante: total - abono
+    percent: p,
+    abono: total * (p / 100),
+    restante: total * (1 - p / 100),
+    comprobante: document.getElementById("comprobantePago").files.length > 0
   };
 
-  document.getElementById("abonoInfo").innerHTML = `
-    Abono (${percent}%): $${abono.toLocaleString("es-CO")} <br>
-    Restante: $${abonoInfo.restante.toLocaleString("es-CO")}
-  `;
+  document.getElementById("abonoInfo").innerHTML =
+    `Abono ${p}%: $${abonoInfo.abono.toLocaleString("es-CO")}<br>
+     Restante: $${abonoInfo.restante.toLocaleString("es-CO")}`;
 }
 
 function closeAbonoModal() {
   document.getElementById("abonoModal").classList.add("hidden");
 }
 
-/********************************
- * WHATSAPP
- ********************************/
+/******** WHATSAPP ********/
 function checkout() {
-  const nombre = clienteNombre.value;
-  const direccion = clienteDireccion.value;
-  const fecha = fechaEntrega.value;
-  const pago = tipoPago.value;
+  let msg = `Pedido ChiquiDetalles\n\n`;
+  msg += `👤 ${clienteNombre.value}\n`;
+  msg += `📍 ${clienteDireccion.value}\n`;
+  msg += `📅 ${fechaEntrega.value}\n`;
+  msg += `💳 ${tipoPago.value}\n\n`;
 
-  let msg = `Pedido:\n👤 ${nombre}\n📍 ${direccion}\n📅 ${fecha}\n💳 ${pago}\n\n`;
-
-  cart.forEach(i => {
-    msg += `- ${i.name} x${i.qty}\n`;
+  cart.forEach(p => {
+    msg += `- ${p.name} x${p.qty}\n`;
   });
 
   if (abonoInfo) {
-    msg += `\n💰 Abono: ${abonoInfo.percent}% ($${abonoInfo.abono.toLocaleString("es-CO")})`;
+    msg += `\n💰 Abono: ${abonoInfo.percent}%`;
+    msg += `\n📎 Comprobante adjunto`;
     msg += `\n💵 Restante: $${abonoInfo.restante.toLocaleString("es-CO")}`;
   }
 
-  window.open(`https://wa.me/573239618378?text=${encodeURIComponent(msg)}`, "_blank");
+  window.open(
+    `https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
 }
