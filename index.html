@@ -5,11 +5,11 @@
   <title>ChiquiDetalles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <style>
     body {
       background-image: url("https://imgur.com/vjQBpbQ.jpg");
       background-size: cover;
-      background-repeat: repeat;
     }
     .product-img {
       width: 100%;
@@ -34,7 +34,7 @@
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded text-center max-w-sm">
     <h2 class="font-bold mb-4">
-      El precio del domicilio varía según la zona de entrega
+      El valor del domicilio depende de la zona de entrega
     </h2>
     <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-6 py-2 rounded">
       Aceptar
@@ -60,59 +60,136 @@
 </div>
 
 <div class="max-w-7xl mx-auto">
-  <h1 class="text-4xl font-bold text-center mb-8">ChiquiDetalles</h1>
+<h1 class="text-4xl font-bold text-center mb-8">ChiquiDetalles</h1>
 
-  <!-- PRODUCTOS -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- PRODUCTOS -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-    <!-- Cada producto mantiene nombre exacto para el JS -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://i.imgur.com/2lXQZ7y.jpg" class="product-img">
-      <h2 class="font-bold mt-2">Empanadas medianas</h2>
-      <p>$2.500 • $2.000 por mayor (30+)</p>
-      <button onclick="addToCart('Empanadas medianas',2500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
-    </div>
+<!-- TODOS LOS PRODUCTOS -->
+<!-- Imágenes genéricas (puedes cambiarlas cuando quieras) -->
 
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://i.imgur.com/7yUvePI.jpg" class="product-img">
-      <h2 class="font-bold mt-2">Burritos salados medianos</h2>
-      <p>$5.000 • $4.500 por mayor (30+)</p>
-      <button onclick="addToCart('Burritos salados medianos',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
-    </div>
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/2lXQZ7y.jpg" class="product-img">
+<h2 class="font-bold mt-2">Empanadas medianas</h2>
+<p>$2.500 • $2.000 por mayor (30+)</p>
+<button onclick="addToCart('Empanadas medianas',2500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
 
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://i.imgur.com/d3cJvZ4.jpg" class="product-img">
-      <h2 class="font-bold mt-2">Mini perros calientes</h2>
-      <p>$5.000 • $4.500 por mayor (30+)</p>
-      <button onclick="addToCart('Mini perros calientes',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
-    </div>
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/7yUvePI.jpg" class="product-img">
+<h2 class="font-bold mt-2">Burritos salados medianos</h2>
+<p>$5.000 • $4.500 por mayor (30+)</p>
+<button onclick="addToCart('Burritos salados medianos',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
 
-    <!-- Agrega los demás productos de la misma manera -->
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/d3cJvZ4.jpg" class="product-img">
+<h2 class="font-bold mt-2">Mini perros calientes</h2>
+<p>$5.000 • $4.500 por mayor (30+)</p>
+<button onclick="addToCart('Mini perros calientes',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
 
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/8JkZKcK.jpg" class="product-img">
+<h2 class="font-bold mt-2">Mini hamburguesas</h2>
+<p>$6.000 • $5.500 por mayor (30+)</p>
+<button onclick="addToCart('Mini hamburguesas',6000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/XmZ5q4Y.jpg" class="product-img">
+<h2 class="font-bold mt-2">Sandwich especial</h2>
+<p>$10.000 • $9.000 por mayor (30+)</p>
+<button onclick="addToCart('Sandwich especial',10000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/yq3L9IH.jpg" class="product-img">
+<h2 class="font-bold mt-2">Mini sandwich</h2>
+<p>$4.000 • $3.500 por mayor (30+)</p>
+<button onclick="addToCart('Mini sandwich',4000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/9z9R2dJ.jpg" class="product-img">
+<h2 class="font-bold mt-2">Deditos de queso</h2>
+<p>$2.500</p>
+<button onclick="addToCart('Deditos de queso',2500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/bB1s9ST.jpg" class="product-img">
+<h2 class="font-bold mt-2">Nuggets de pollo</h2>
+<p>$2.500</p>
+<button onclick="addToCart('Nuggets de pollo',2500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/FWm6O5F.jpg" class="product-img">
+<h2 class="font-bold mt-2">Mini arepas rellenas</h2>
+<p>$5.000 • $4.500 por mayor (30+)</p>
+<button onclick="addToCart('Mini arepas rellenas',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/1Qf8g7X.jpg" class="product-img">
+<h2 class="font-bold mt-2">Medallones de pechuga rellena</h2>
+<p>$7.000 • $6.400 por mayor (30+)</p>
+<button onclick="addToCart('Medallones de pechuga rellena',7000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/3mJ1K7E.jpg" class="product-img">
+<h2 class="font-bold mt-2">Natilla + 3 buñuelos</h2>
+<p>$5.000 • $4.500 por mayor (50+)</p>
+<button onclick="addToCart('Natilla + 3 buñuelos',5000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/4H0Kk8Z.jpg" class="product-img">
+<h2 class="font-bold mt-2">Avena casera</h2>
+<p>$3.500</p>
+<button onclick="addToCart('Avena casera',3500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/U9Z7FZx.jpg" class="product-img">
+<h2 class="font-bold mt-2">Arroz de leche sencillo</h2>
+<p>$4.500</p>
+<button onclick="addToCart('Arroz de leche sencillo',4500)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+<div class="bg-white p-4 rounded shadow">
+<img src="https://i.imgur.com/U9Z7FZx.jpg" class="product-img">
+<h2 class="font-bold mt-2">Arroz de leche especial</h2>
+<p>$6.000</p>
+<button onclick="addToCart('Arroz de leche especial',6000)" class="bg-green-500 text-white w-full py-2 mt-2 rounded">Agregar</button>
+</div>
+
+</div>
+
+<!-- DATOS -->
+<div class="bg-white p-4 rounded shadow mt-10 max-w-4xl mx-auto">
+  <h2 class="text-2xl font-bold mb-4">Datos del pedido</h2>
+  <input id="clienteNombre" class="w-full border p-2 mb-2 rounded" placeholder="Nombre completo">
+  <input id="clienteDireccion" class="w-full border p-2 mb-2 rounded" placeholder="Dirección">
+  <input id="fechaEntrega" type="date" class="w-full border p-2 mb-2 rounded">
+  <select id="tipoPago" onchange="handlePagoChange(this.value)" class="w-full border p-2 rounded">
+    <option value="Pago completo">Pago completo</option>
+    <option value="Abono">Abono</option>
+  </select>
+</div>
+
+<!-- CARRITO -->
+<div class="max-w-4xl mx-auto mt-8">
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">Carrito</h2>
+    <div id="cart"></div>
+    <button onclick="checkout()" class="bg-blue-600 text-white w-full py-3 mt-4 rounded">
+      Enviar pedido por WhatsApp
+    </button>
   </div>
-
-  <!-- DATOS -->
-  <div class="bg-white p-4 rounded shadow mt-10 max-w-4xl mx-auto">
-    <h2 class="text-2xl font-bold mb-4">Datos del pedido</h2>
-    <input id="clienteNombre" class="w-full border p-2 mb-2 rounded" placeholder="Nombre completo">
-    <input id="clienteDireccion" class="w-full border p-2 mb-2 rounded" placeholder="Dirección">
-    <input id="fechaEntrega" type="date" class="w-full border p-2 mb-2 rounded">
-    <select id="tipoPago" onchange="handlePagoChange(this.value)" class="w-full border p-2 rounded">
-      <option value="Pago completo">Pago completo</option>
-      <option value="Abono">Abono</option>
-    </select>
-  </div>
-
-  <!-- CARRITO -->
-  <div class="max-w-4xl mx-auto mt-8">
-    <div class="bg-white p-4 rounded shadow">
-      <h2 class="text-2xl font-bold mb-4 text-center">Carrito</h2>
-      <div id="cart"></div>
-      <button onclick="checkout()" class="bg-blue-600 text-white w-full py-3 mt-4 rounded">
-        Enviar pedido por WhatsApp
-      </button>
-    </div>
-  </div>
+</div>
 
 </div>
 
