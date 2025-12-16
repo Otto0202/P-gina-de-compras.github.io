@@ -42,6 +42,10 @@ function addToCart(name, price) {
   p.qty++;
   applyWholesale(p);
   updateCart();
+
+  const cartDiv = document.getElementById("cart");
+  cartDiv.classList.add("add-animation");
+  setTimeout(() => cartDiv.classList.remove("add-animation"), 300);
 }
 
 function applyWholesale(p) {
@@ -80,27 +84,48 @@ function updateCart() {
     total += subtotal;
 
     div.innerHTML += `
-      <div class="border p-3 mb-3 rounded">
+      <div class="border p-3 mb-3 rounded ${isWholesale ? 'wholesale-animate' : ''}">
         <p class="font-bold">${p.name}</p>
+
         ${
-          rule
-            ? isWholesale
-              ? `<span class="text-green-700 text-xs">🔥 Precio por mayor aplicado</span>`
-              : `<span class="text-orange-600 text-xs">Faltan ${rule.limit - p.qty} unidades para precio por mayor</span>`
-            : ""
+          isWholesale && rule
+            ? `<div class="text-sm">
+                <span class="line-through text-gray-500">$${rule.unit}</span>
+                <span class="text-green-700 font-bold ml-2">
+                  $${p.finalPrice} 🎉
+                </span>
+              </div>
+              <span class="text-green-700 text-xs font-semibold">
+                Precio por mayor activado
+              </span>`
+            : rule
+              ? `<span class="text-orange-600 text-xs">
+                  Faltan ${rule.limit - p.qty} unidades para precio por mayor
+                </span>`
+              : `<span class="text-sm">$${p.finalPrice}</span>`
         }
+
         <div class="flex justify-between items-center mt-2">
-          <span>${p.qty} x $${p.finalPrice.toLocaleString("es-CO")}</span>
+          <span>${p.qty} unidades</span>
           <span class="font-bold">$${subtotal.toLocaleString("es-CO")}</span>
         </div>
-        <div class="flex gap-2 mt-2">
-          <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">-</button>
+
+        <div class="flex items-center gap-2 mt-2">
+          <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">−</button>
+          <input type="number" min="1" value="${p.qty}"
+            onchange="updateQuantity(${i}, this.value)"
+            class="border w-20 text-center rounded">
           <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
         </div>
-      </div>`;
+      </div>
+    `;
   });
 
-  div.innerHTML += `<p class="font-bold text-xl text-center">Total: $${total.toLocaleString("es-CO")}</p>`;
+  div.innerHTML += `
+    <p class="font-bold text-xl text-center mt-4">
+      Total: $${total.toLocaleString("es-CO")}
+    </p>
+  `;
 }
 
 /******** ABONO ********/
@@ -140,11 +165,6 @@ function checkout() {
   cart.forEach(p => {
     msg += `- ${p.name} x${p.qty}\n`;
   });
-
-  if (abonoInfo) {
-    msg += `\n💰 Abono: ${abonoInfo.percent}% ($${abonoInfo.abono.toLocaleString("es-CO")})`;
-    msg += `\n💵 Restante: ${abonoInfo.restantePercent}% ($${abonoInfo.restante.toLocaleString("es-CO")})`;
-  }
 
   window.open(
     `https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,
