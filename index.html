@@ -1,162 +1,108 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChiquiDetalles</title>
+let cart = [];
+let orderData = {};
 
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+function closeAlertModal(){
+  document.getElementById("welcomeModal").style.display="none";
+}
 
-  <style>
-    body{
-      background-image:url("https://imgur.com/vjQBpbQ.jpg");
-      background-size:cover;
-      background-repeat:repeat;
-    }
-    .product-img{
-      width:100%;
-      height:380px;
-      object-fit:cover;
-      border-radius:6px;
-      cursor:pointer;
-    }
-  </style>
-</head>
+// IMÁGENES
+function openImageModal(src){
+  modalImage.src=src;
+  imageModal.classList.remove("hidden");
+}
+function closeImageModal(e){
+  if(e.target.id==="imageModal") imageModal.classList.add("hidden");
+}
+function forceCloseImageModal(){ imageModal.classList.add("hidden"); }
 
-<body class="bg-gray-100 bg-opacity-90 p-6">
+// PRECIOS
+function updatePrice(){
+  priceEmpanada.textContent="$"+Number(empanadaSelect.value).toLocaleString("es-CO");
+}
 
-<!-- MODAL AVISO -->
-<div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded text-center space-y-4">
-    <p class="font-bold">El precio del domicilio varía según la zona</p>
-    <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-4 py-2 rounded">Aceptar</button>
-  </div>
-</div>
+// CARRITO
+function addToCart(name,price,option="Único"){
+  let item=cart.find(p=>p.name===name);
+  if(!item){ item={name,options:{}}; cart.push(item); }
+  if(!item.options[option]) item.options[option]={qty:1,price};
+  else item.options[option].qty++;
+  updateCart();
+}
 
-<!-- MODAL IMAGEN -->
-<div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
-     onclick="closeImageModal(event)">
-  <img id="modalImage" class="max-w-[95%] max-h-[95%] rounded shadow-xl">
-  <button onclick="forceCloseImageModal()"
-    class="absolute top-5 right-5 text-white text-5xl font-bold">×</button>
-</div>
+function updateCart(){
+  cartDiv=document.getElementById("cart");
+  cartDiv.innerHTML="";
+  let total=0;
 
-<!-- MODAL DATOS -->
-<div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded w-full max-w-md space-y-4">
-    <h2 class="text-xl font-bold text-center">Datos del pedido</h2>
-    <input id="clientName" class="w-full border p-2 rounded" placeholder="Nombre del cliente">
-    <input id="deliveryDate" type="date" class="w-full border p-2 rounded">
-    <textarea id="deliveryAddress" class="w-full border p-2 rounded" placeholder="Dirección"></textarea>
-    <button onclick="confirmOrder()" class="bg-green-600 text-white px-4 py-2 rounded w-full">
-      Generar orden
-    </button>
-  </div>
-</div>
+  cart.forEach((item,i)=>{
+    let d=document.createElement("div");
+    d.innerHTML=`<strong>${item.name}</strong>`;
+    Object.entries(item.options).forEach(([op,data])=>{
+      let sub=data.qty*data.price;
+      total+=sub;
+      d.innerHTML+=`
+        <div class="flex justify-between ml-4">
+          <span>${op} x ${data.qty}</span>
+          <span>$${sub.toLocaleString("es-CO")}</span>
+        </div>`;
+    });
+    cartDiv.appendChild(d);
+  });
 
-<!-- MODAL INFO PDF -->
-<div id="pdfInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded w-full max-w-md text-center space-y-4">
-    <h2 class="text-xl font-bold">Orden generada</h2>
-    <p>📄 El PDF se descargó.</p>
-    <p>📎 Adjunta el PDF en WhatsApp para continuar.</p>
-    <button onclick="closePdfInfoModal()" class="bg-green-600 text-white px-4 py-2 rounded w-full">
-      Ir a WhatsApp
-    </button>
-  </div>
-</div>
+  cartDiv.innerHTML+=`<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
+}
 
-<!-- PLANTILLA PDF -->
-<div id="pdfTemplate" style="position:absolute;left:-9999px;top:0;width:800px;font-family:Arial;padding:30px">
-  <h2 style="text-align:center;">ORDEN DE COMPRA</h2>
-  <p><strong>Cliente:</strong> <span id="pdfCliente"></span></p>
-  <p><strong>Dirección:</strong> <span id="pdfDireccion"></span></p>
-  <p><strong>Fecha:</strong> <span id="pdfFecha"></span></p>
+// ORDEN
+function openOrderModal(){
+  if(cart.length===0) return alert("Carrito vacío");
+  orderModal.classList.remove("hidden");
+}
 
-  <table width="100%" border="1" cellpadding="6" style="margin-top:20px">
-    <thead>
-      <tr>
-        <th>Producto</th><th>Cant</th><th>Costo</th>
-      </tr>
-    </thead>
-    <tbody id="pdfProductos"></tbody>
-  </table>
+function confirmOrder(){
+  orderData.client=clientName.value;
+  orderData.date=deliveryDate.value;
+  orderData.address=deliveryAddress.value;
+  if(!orderData.client||!orderData.date||!orderData.address)
+    return alert("Completa los datos");
 
-  <h3 style="text-align:right;margin-top:20px">
-    TOTAL: $<span id="pdfTotal"></span>
-  </h3>
-</div>
+  generatePDF();
+  orderModal.classList.add("hidden");
+  pdfInfoModal.classList.remove("hidden");
+}
 
-<!-- ================= PRODUCTOS ================= -->
+function closePdfInfoModal(){
+  pdfInfoModal.classList.add("hidden");
+  sendToWhatsApp();
+}
 
-<div class="max-w-6xl mx-auto">
-  <h1 class="text-4xl font-bold text-center mb-6">ChiquiDetalles</h1>
+// PDF
+function generatePDF(){
+  pdfCliente.textContent=orderData.client;
+  pdfDireccion.textContent=orderData.address;
+  pdfFecha.textContent=orderData.date;
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  let total=0;
+  pdfProductos.innerHTML="";
 
-    <!-- Empanadas -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/XgEIdeN.jpg" class="product-img" onclick="openImageModal(this.src)">
-      <h2 class="text-xl font-bold mt-2">Empanadas / Arepas</h2>
-      <select id="empanadaSelect" class="border p-2 w-full mt-2" onchange="updatePrice()">
-        <option value="2500">Empanada unidad</option>
-        <option value="6000">Arepa rellena</option>
-        <option value="60000">Empanadas x30</option>
-      </select>
-      <p id="priceEmpanada" class="font-bold mt-2">$2.500</p>
-      <button onclick="addToCart('Empanadas', parseInt(empanadaSelect.value), empanadaSelect.options[empanadaSelect.selectedIndex].text)"
-        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
-    </div>
+  cart.forEach(item=>{
+    Object.entries(item.options).forEach(([op,data])=>{
+      let sub=data.qty*data.price;
+      total+=sub;
+      pdfProductos.innerHTML+=`
+        <tr>
+          <td>${item.name} (${op})</td>
+          <td>${data.qty}</td>
+          <td>$${sub.toLocaleString("es-CO")}</td>
+        </tr>`;
+    });
+  });
 
-    <!-- Buñuelos -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/YVId4rm.jpg" class="product-img" onclick="openImageModal(this.src)">
-      <h2 class="text-xl font-bold mt-2">Buñuelos x20</h2>
-      <p class="font-bold">$5.000</p>
-      <button onclick="addToCart('Buñuelos x20',5000)"
-        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
-    </div>
+  pdfTotal.textContent=total.toLocaleString("es-CO");
+  html2pdf().from(pdfTemplate).save("Orden_Compra.pdf");
+}
 
-    <!-- Natilla -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/3uq6mlL.jpg" class="product-img" onclick="openImageModal(this.src)">
-      <h2 class="text-xl font-bold mt-2">Natilla + Buñuelos</h2>
-      <p class="font-bold">$4.500</p>
-      <button onclick="addToCart('Natilla + Buñuelos',4500)"
-        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
-    </div>
-
-    <!-- Arroz -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/4NF7TOu.jpg" class="product-img" onclick="openImageModal(this.src)">
-      <h2 class="text-xl font-bold mt-2">Arroz con leche</h2>
-      <p class="font-bold">$4.500</p>
-      <button onclick="addToCart('Arroz con leche',4500)"
-        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
-    </div>
-
-    <!-- Gelatina -->
-    <div class="bg-white p-4 rounded shadow">
-      <img src="https://imgur.com/owsoe8H.jpg" class="product-img" onclick="openImageModal(this.src)">
-      <h2 class="text-xl font-bold mt-2">Gelatina mosaico</h2>
-      <p class="font-bold">$4.500</p>
-      <button onclick="addToCart('Gelatina mosaico',4500)"
-        class="bg-green-500 text-white px-4 py-2 rounded w-full mt-2">Agregar</button>
-    </div>
-
-  </div>
-
-  <!-- CARRITO -->
-  <div class="bg-white p-4 rounded shadow mt-8">
-    <h2 class="text-2xl font-bold mb-4">Carrito</h2>
-    <div id="cart"></div>
-    <button onclick="openOrderModal()" class="bg-blue-600 text-white px-4 py-2 rounded w-full mt-4">
-      Continuar pedido
-    </button>
-  </div>
-</div>
-
-<script src="index.js"></script>
-</body>
-</html>
+// WHATSAPP
+function sendToWhatsApp(){
+  let msg=`Hola 👋, adjunto orden de compra en PDF`;
+  window.open(`https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,"_blank");
+}
