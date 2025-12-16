@@ -165,11 +165,34 @@ function updateCart() {
 
 /******** WHATSAPP ********/
 function checkout() {
-  let msg = `Pedido ChiquiDetalles\n\n`;
+  let total = 0;
+
+  let msg = "Hola, quiero realizar un pedido:\n\n";
+
+  // Datos del cliente (si existen los inputs)
+  if (typeof clienteNombre !== "undefined") {
+    msg += `👤 Nombre: ${clienteNombre.value}\n`;
+    msg += `📍 Dirección: ${clienteDireccion.value}\n`;
+    msg += `📅 Fecha de entrega: ${fechaEntrega.value}\n`;
+    msg += `💳 Pago: ${tipoPago.value}\n\n`;
+  }
+
+  msg += "🛒 Pedido:\n";
 
   cart.forEach(p => {
-    msg += `- ${p.name} x${p.qty}\n`;
+    const subtotal = p.qty * p.finalPrice;
+    total += subtotal;
+
+    msg += `- ${p.name} x${p.qty} → $${subtotal.toLocaleString("es-CO")}\n`;
   });
+
+  msg += `\n💵 Total: $${total.toLocaleString("es-CO")}\n`;
+
+  // SI HAY ABONO
+  if (tipoPago.value === "Abono" && abonoInfo) {
+    msg += `\n💰 Abono: ${abonoInfo.percent}% → $${abonoInfo.abono.toLocaleString("es-CO")}`;
+    msg += `\n💸 Restante: ${abonoInfo.restantePercent}% → $${abonoInfo.restante.toLocaleString("es-CO")}`;
+  }
 
   window.open(
     `https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,
