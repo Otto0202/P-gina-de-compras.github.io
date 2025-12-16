@@ -1,32 +1,11 @@
-// Cerrar modal de aviso
 function closeAlertModal() {
   document.getElementById("welcomeModal").style.display = "none";
 }
 
 let cart = [];
+let orderData = {};
 
-
-// ------------------------
-// ACTUALIZAR PRECIOS
-// ------------------------
-
-function updatePrice() {
-  const price = document.getElementById("colorEmpanada").value;
-  document.getElementById("priceEmpanada").textContent =
-    "$" + Number(price).toLocaleString("es-CO");
-}
-
-function updatePriceSandwich() {
-  const price = document.getElementById("colorSandwich").value;
-  document.getElementById("priceSandwich").textContent =
-    "$" + Number(price).toLocaleString("es-CO");
-}
-
-
-
-// ------------------------
-// AGREGAR AL CARRITO
-// ------------------------
+// ================= CARRITO (TU LÓGICA ORIGINAL) =================
 
 function addToCart(productName, price, optionName = "Único") {
   let product = cart.find(item => item.name === productName);
@@ -44,12 +23,6 @@ function addToCart(productName, price, optionName = "Único") {
 
   updateCart();
 }
-
-
-
-// ------------------------
-// ACTUALIZAR CARRITO
-// ------------------------
 
 function updateCart() {
   const cartDiv = document.getElementById("cart");
@@ -72,107 +45,104 @@ function updateCart() {
     div.appendChild(title);
 
     Object.entries(item.options).forEach(([option, data]) => {
-      let row = document.createElement("div");
-      row.className = "flex justify-between items-center ml-4 gap-2";
-
       const subtotal = data.qty * data.price;
-
-      row.innerHTML = `
-        <span>(${option} x ${data.qty})</span>
-        <span>$${subtotal.toLocaleString("es-CO")}</span>
-      `;
-
-      // +
-      let btnAdd = document.createElement("button");
-      btnAdd.className = "bg-green-500 text-white px-2 py-1 rounded";
-      btnAdd.textContent = "+";
-      btnAdd.onclick = () => {
-        data.qty++;
-        updateCart();
-      };
-
-      // -
-      let btnRemove = document.createElement("button");
-      btnRemove.className = "bg-red-500 text-white px-2 py-1 rounded";
-      btnRemove.textContent = "-";
-      btnRemove.onclick = () => {
-        if (data.qty > 1) {
-          data.qty--;
-        } else {
-          delete item.options[option];
-        }
-        if (Object.keys(item.options).length === 0) {
-          cart.splice(index, 1);
-        }
-        updateCart();
-      };
-
-      row.appendChild(btnAdd);
-      row.appendChild(btnRemove);
-
-      div.appendChild(row);
-
       total += subtotal;
+
+      div.innerHTML += `
+        <div class="ml-4 flex justify-between">
+          <span>(${option} x ${data.qty})</span>
+          <span>$${subtotal.toLocaleString("es-CO")}</span>
+        </div>
+      `;
     });
 
     cartDiv.appendChild(div);
   });
 
-  let totalDiv = document.createElement("div");
-  totalDiv.className = "font-bold mt-4";
-  totalDiv.textContent = `Total: $${total.toLocaleString("es-CO")}`;
-  cartDiv.appendChild(totalDiv);
+  cartDiv.innerHTML += `<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
 }
 
+// ================= NUEVA LÓGICA =================
 
-
-// ------------------------
-// ENVIAR A WHATSAPP
-// ------------------------
-
-function checkout() {
+function openOrderModal() {
   if (cart.length === 0) {
-    alert("Tu carrito está vacío.");
+    alert("Tu carrito está vacío");
+    return;
+  }
+  document.getElementById("orderModal").classList.remove("hidden");
+}
+
+function confirmOrder() {
+  orderData.client = document.getElementById("clientName").value;
+  orderData.date = document.getElementById("deliveryDate").value;
+  orderData.address = document.getElementById("deliveryAddress").value;
+  orderData.cotizacion = Math.floor(10000 + Math.random() * 90000);
+
+  if (!orderData.client || !orderData.date || !orderData.address) {
+    alert("Completa todos los datos");
     return;
   }
 
-  let message = "Hola, quiero comprar:\n";
+  generatePDF();
+  sendToWhatsApp();
+}
+
+function generatePDF() {
+  document.getElementById("pdfCliente").textContent = orderData.client;
+  document.getElementById("pdfDireccion").textContent = orderData.address;
+  document.getElementById("pdfFecha").textContent = orderData.date;
+  document.getElementById("pdfCotizacion").textContent = orderData.cotizacion;
+
   let total = 0;
+  const tbody = document.getElementById("pdfProductos");
+  tbody.innerHTML = "";
 
   cart.forEach(item => {
     Object.entries(item.options).forEach(([op, data]) => {
-      const subtotal = data.qty * data.price;
-      total += subtotal;
-      message += `- ${item.name} (${op} x ${data.qty}) → $${subtotal.toLocaleString("es-CO")}\n`;
+      const sub = data.qty * data.price;
+      total += sub;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${item.name} (${op})</td>
+          <td align="center">${data.qty}</td>
+          <td align="right">$${sub.toLocaleString("es-CO")}</td>
+        </tr>
+      `;
     });
   });
 
-  message += `\nTotal: $${total.toLocaleString("es-CO")}`;
-  const encoded = encodeURIComponent(message);
+  document.getElementById("pdfTotal").textContent = total.toLocaleString("es-CO");
 
-  window.open(`https://wa.me/573239618378?text=${encoded}`, "_blank");
+  html2pdf()
+    .set({
+      margin: 10,
+      filename: `Orden_Compra_${orderData.cotizacion}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { format: "a4", orientation: "portrait" }
+    })
+    .from(document.getElementById("pdfTemplate"))
+    .save();
 }
 
+function sendToWhatsApp() {
+  let msg = `Hola, adjunto orden de compra.\n\n`;
+  msg += `Cliente: ${orderData.client}\n`;
+  msg += `Dirección: ${orderData.address}\n`;
+  msg += `Fecha entrega: ${orderData.date}\n\n`;
 
+  let total = 0;
+  cart.forEach(item => {
+    Object.entries(item.options).forEach(([op, data]) => {
+      total += data.qty * data.price;
+      msg += `- ${item.name} (${op} x ${data.qty})\n`;
+    });
+  });
 
-// ------------------------
-// MODAL DE IMAGEN COMPLETA
-// ------------------------
+  msg += `\nTOTAL: $${total.toLocaleString("es-CO")}\n📎 PDF generado`;
 
-function openImageModal(src) {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-
-  modalImg.src = src;
-  modal.classList.remove("hidden");
-}
-
-function closeImageModal(event) {
-  if (event.target.id === "imageModal") {
-    document.getElementById("imageModal").classList.add("hidden");
-  }
-}
-
-function forceCloseImageModal() {
-  document.getElementById("imageModal").classList.add("hidden");
+  window.open(
+    `https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
 }
