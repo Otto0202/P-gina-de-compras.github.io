@@ -7,6 +7,16 @@ window.onload = () => {
   document.getElementById("welcomeModal").style.display = "flex";
 };
 
+/******** MODAL IMAGEN ********/
+function openImage(src) {
+  document.getElementById("modalImage").src = src;
+  document.getElementById("imageModal").classList.remove("hidden");
+}
+
+function closeImageModal() {
+  document.getElementById("imageModal").classList.add("hidden");
+}
+
 /******** CARRITO ********/
 let cart = [];
 let abonoInfo = null;
