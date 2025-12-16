@@ -5,7 +5,6 @@
   <title>ChiquiDetalles</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Tailwind -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
   <style>
@@ -22,66 +21,60 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
+    /* Animación al agregar */
+    .add-animation {
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    /* Animación precio por mayor */
+    .wholesale-animate {
+      animation: glow 1s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { background-color: #ecfdf5; }
+      to { background-color: #d1fae5; }
+    }
   </style>
 </head>
 
 <body class="bg-gray-100 bg-opacity-90 p-4">
 
-<!-- ========= MODAL IMAGEN ========= -->
+<!-- MODAL IMAGEN -->
 <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
   <img id="modalImage" class="max-w-full max-h-full object-contain">
   <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-4xl font-bold">✕</button>
 </div>
 
-<!-- ========= MODAL DOMICILIO ========= -->
+<!-- MODAL DOMICILIO -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
   <div class="bg-white p-6 rounded text-center max-w-sm">
-   <h2 class="text-xl font-extrabold text-red-600 mb-3 flex items-center justify-center gap-2">
-  🚨 IMPORTANTE
-</h2>
-
-<p class="text-gray-800 text-base font-semibold mb-4">
-  El valor del <span class="text-red-600 font-bold">domicilio</span> depende de la
-  <span class="font-bold">zona de entrega</span> y se confirmará antes de finalizar el pedido.
-</p>
-
-<p class="text-sm text-gray-600">
-  Por favor, verifica tu dirección correctamente.
-</p>
+    <h2 class="text-xl font-extrabold text-red-600 mb-3">🚨 IMPORTANTE</h2>
+    <p class="font-semibold mb-2">
+      El valor del <span class="text-red-600">domicilio</span> depende de la zona de entrega
+    </p>
     <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-6 py-2 rounded">
       Aceptar
     </button>
   </div>
 </div>
 
-<!-- ========= MODAL ABONO ========= -->
-<div id="abonoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
-  <div class="bg-white p-6 rounded max-w-sm w-full">
-    <h2 class="text-xl font-bold mb-2">Abono para agendar</h2>
-    <p class="text-sm mb-2">Mínimo 50%</p>
-
-    <input type="range" min="50" max="100" value="50"
-           onchange="updateAbono(this.value)" class="w-full">
-
-    <div id="abonoInfo" class="mt-3 font-semibold"></div>
-
-    <button onclick="closeAbonoModal()" class="bg-green-600 text-white w-full py-2 mt-4 rounded">
-      Confirmar abono
-    </button>
-  </div>
-</div>
-
 <div class="max-w-7xl mx-auto">
 
-<!-- ========= LOGO + TITULO ========= -->
+<!-- LOGO + TITULO -->
 <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-  <img src="https://imgur.com/pV0dmDq.png" alt="ChiquiDetalles" class="w-32 md:w-40">
-  <h1 class="text-4xl md:text-5xl font-bold text-center">
-    ChiquiDetalles
-  </h1>
+  <img src="logo.png" alt="ChiquiDetalles" class="w-32 md:w-40">
+  <h1 class="text-4xl md:text-5xl font-bold text-center">ChiquiDetalles</h1>
 </div>
 
-<!-- ========= PRODUCTOS ========= -->
+<!-- PRODUCTOS -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
 <!-- PRODUCTO -->
@@ -186,8 +179,7 @@
 
  </div>
 
-
-<!-- ========= DATOS ========= -->
+<!-- DATOS -->
 <div class="bg-white p-4 rounded shadow mt-10 max-w-4xl mx-auto">
   <h2 class="text-2xl font-bold mb-4">Datos del pedido</h2>
   <input id="clienteNombre" class="w-full border p-2 mb-2 rounded" placeholder="Nombre completo">
@@ -199,7 +191,7 @@
   </select>
 </div>
 
-<!-- ========= CARRITO ========= -->
+<!-- CARRITO -->
 <div class="max-w-4xl mx-auto mt-8 bg-white p-4 rounded shadow">
   <h2 class="text-2xl font-bold mb-4 text-center">Carrito</h2>
   <div id="cart"></div>
@@ -213,3 +205,4 @@
 <script src="index.js"></script>
 </body>
 </html>
+
