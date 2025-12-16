@@ -1,56 +1,56 @@
-// Cerrar modal de aviso
-function closeAlertModal() {
-  document.getElementById("welcomeModal").style.display = "none";
-}
-
 let cart = [];
 
+// ===============================
+// CONFIGURACIÓN DE PRODUCTOS
+// ===============================
+const wholesaleRules = {
+  "Empanadas medianas": { limit: 30, wholesale: 2000, unit: 2500 },
+  "Burritos salados medianos": { limit: 30, wholesale: 4500, unit: 5000 },
+  "Mini perros calientes": { limit: 30, wholesale: 4500, unit: 5000 },
+  "Mini hamburguesas": { limit: 30, wholesale: 5500, unit: 6000 },
+  "Sandwich especial": { limit: 30, wholesale: 9000, unit: 10000 },
+  "Mini sandwich": { limit: 30, wholesale: 3500, unit: 4000 },
+  "Mini arepas rellenas": { limit: 30, wholesale: 4500, unit: 5000 },
+  "Medallones de pechuga rellena": { limit: 30, wholesale: 6400, unit: 7000 },
+  "Natilla + 3 buñuelos": { limit: 50, wholesale: 4500, unit: 5000 }
+};
 
-// ------------------------
-// ACTUALIZAR PRECIOS
-// ------------------------
-
-function updatePrice() {
-  const price = document.getElementById("colorEmpanada").value;
-  document.getElementById("priceEmpanada").textContent =
-    "$" + Number(price).toLocaleString("es-CO");
-}
-
-function updatePriceSandwich() {
-  const price = document.getElementById("colorSandwich").value;
-  document.getElementById("priceSandwich").textContent =
-    "$" + Number(price).toLocaleString("es-CO");
-}
-
-
-
-// ------------------------
+// ===============================
 // AGREGAR AL CARRITO
-// ------------------------
-
-function addToCart(productName, price, optionName = "Único") {
-  let product = cart.find(item => item.name === productName);
+// ===============================
+function addToCart(name, unitPrice) {
+  let product = cart.find(p => p.name === name);
 
   if (!product) {
-    product = { name: productName, options: {} };
+    product = {
+      name,
+      qty: 0,
+      unitPrice,
+      finalPrice: unitPrice
+    };
     cart.push(product);
   }
 
-  if (!product.options[optionName]) {
-    product.options[optionName] = { qty: 1, price: price };
-  } else {
-    product.options[optionName].qty++;
-  }
-
+  product.qty++;
+  applyWholesale(product);
   updateCart();
 }
 
+// ===============================
+// APLICAR PRECIO POR MAYOR
+// ===============================
+function applyWholesale(product) {
+  const rule = wholesaleRules[product.name];
+  if (rule && product.qty >= rule.limit) {
+    product.finalPrice = rule.wholesale;
+  } else {
+    product.finalPrice = product.unitPrice;
+  }
+}
 
-
-// ------------------------
+// ===============================
 // ACTUALIZAR CARRITO
-// ------------------------
-
+// ===============================
 function updateCart() {
   const cartDiv = document.getElementById("cart");
   cartDiv.innerHTML = "";
@@ -63,116 +63,89 @@ function updateCart() {
   let total = 0;
 
   cart.forEach((item, index) => {
+    const subtotal = item.qty * item.finalPrice;
+    total += subtotal;
+
     let div = document.createElement("div");
     div.className = "mb-4 p-2 border-b";
 
-    let title = document.createElement("p");
-    title.className = "font-bold";
-    title.textContent = item.name;
-    div.appendChild(title);
+    let mayorText = "";
+    const rule = wholesaleRules[item.name];
+    if (rule && item.qty >= rule.limit) {
+      mayorText = ` (Precio por mayor desde ${rule.limit})`;
+    }
 
-    Object.entries(item.options).forEach(([option, data]) => {
-      let row = document.createElement("div");
-      row.className = "flex justify-between items-center ml-4 gap-2";
-
-      const subtotal = data.qty * data.price;
-
-      row.innerHTML = `
-        <span>(${option} x ${data.qty})</span>
+    div.innerHTML = `
+      <p class="font-bold">${item.name}${mayorText}</p>
+      <div class="flex justify-between items-center">
+        <span>${item.qty} x $${item.finalPrice.toLocaleString("es-CO")}</span>
         <span>$${subtotal.toLocaleString("es-CO")}</span>
-      `;
-
-      // +
-      let btnAdd = document.createElement("button");
-      btnAdd.className = "bg-green-500 text-white px-2 py-1 rounded";
-      btnAdd.textContent = "+";
-      btnAdd.onclick = () => {
-        data.qty++;
-        updateCart();
-      };
-
-      // -
-      let btnRemove = document.createElement("button");
-      btnRemove.className = "bg-red-500 text-white px-2 py-1 rounded";
-      btnRemove.textContent = "-";
-      btnRemove.onclick = () => {
-        if (data.qty > 1) {
-          data.qty--;
-        } else {
-          delete item.options[option];
-        }
-        if (Object.keys(item.options).length === 0) {
-          cart.splice(index, 1);
-        }
-        updateCart();
-      };
-
-      row.appendChild(btnAdd);
-      row.appendChild(btnRemove);
-
-      div.appendChild(row);
-
-      total += subtotal;
-    });
+      </div>
+      <div class="flex gap-2 mt-2">
+        <button class="bg-green-500 text-white px-2 rounded" onclick="addOne(${index})">+</button>
+        <button class="bg-red-500 text-white px-2 rounded" onclick="removeOne(${index})">-</button>
+      </div>
+    `;
 
     cartDiv.appendChild(div);
   });
 
-  let totalDiv = document.createElement("div");
-  totalDiv.className = "font-bold mt-4";
-  totalDiv.textContent = `Total: $${total.toLocaleString("es-CO")}`;
-  cartDiv.appendChild(totalDiv);
+  cartDiv.innerHTML += `
+    <div class="font-bold mt-4 text-xl">
+      Total: $${total.toLocaleString("es-CO")}
+    </div>
+  `;
 }
 
+function addOne(index) {
+  cart[index].qty++;
+  applyWholesale(cart[index]);
+  updateCart();
+}
 
+function removeOne(index) {
+  cart[index].qty--;
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  } else {
+    applyWholesale(cart[index]);
+  }
+  updateCart();
+}
 
-// ------------------------
+// ===============================
 // ENVIAR A WHATSAPP
-// ------------------------
-
+// ===============================
 function checkout() {
-  if (cart.length === 0) {
-    alert("Tu carrito está vacío.");
+  const nombre = document.getElementById("clienteNombre").value;
+  const direccion = document.getElementById("clienteDireccion").value;
+  const fecha = document.getElementById("fechaEntrega").value;
+  const pago = document.getElementById("tipoPago").value;
+
+  if (!nombre || !direccion || !fecha) {
+    alert("Por favor completa todos los datos");
     return;
   }
 
-  let message = "Hola, quiero comprar:\n";
+  let mensaje = `Hola, quiero hacer un pedido:\n\n`;
+  mensaje += `👤 Nombre: ${nombre}\n`;
+  mensaje += `📍 Dirección: ${direccion}\n`;
+  mensaje += `📅 Fecha de entrega: ${fecha}\n`;
+  mensaje += `💰 Pago: ${pago}\n\n`;
+  mensaje += `🛒 Pedido:\n`;
+
   let total = 0;
 
   cart.forEach(item => {
-    Object.entries(item.options).forEach(([op, data]) => {
-      const subtotal = data.qty * data.price;
-      total += subtotal;
-      message += `- ${item.name} (${op} x ${data.qty}) → $${subtotal.toLocaleString("es-CO")}\n`;
-    });
+    const subtotal = item.qty * item.finalPrice;
+    total += subtotal;
+    mensaje += `- ${item.name} x${item.qty} → $${subtotal.toLocaleString("es-CO")}\n`;
   });
 
-  message += `\nTotal: $${total.toLocaleString("es-CO")}`;
-  const encoded = encodeURIComponent(message);
+  mensaje += `\n💵 Total: $${total.toLocaleString("es-CO")}`;
 
-  window.open(`https://wa.me/573239618378?text=${encoded}`, "_blank");
-}
-
-
-
-// ------------------------
-// MODAL DE IMAGEN COMPLETA
-// ------------------------
-
-function openImageModal(src) {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
-
-  modalImg.src = src;
-  modal.classList.remove("hidden");
-}
-
-function closeImageModal(event) {
-  if (event.target.id === "imageModal") {
-    document.getElementById("imageModal").classList.add("hidden");
-  }
-}
-
-function forceCloseImageModal() {
-  document.getElementById("imageModal").classList.add("hidden");
+  window.open(
+    `https://wa.me/573239618378?text=${encodeURIComponent(mensaje)}`,
+    "_blank"
+  );
 }
