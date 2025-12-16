@@ -61,10 +61,18 @@
 <!-- MODAL DOMICILIO -->
 <div id="welcomeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40">
   <div class="bg-white p-6 rounded text-center max-w-sm">
-    <h2 class="text-xl font-extrabold text-red-600 mb-3">🚨 IMPORTANTE</h2>
-    <p class="font-semibold mb-2">
-      El valor del <span class="text-red-600">domicilio</span> depende de la zona de entrega
-    </p>
+  <h2 class="text-xl font-extrabold text-red-600 mb-3 flex items-center justify-center gap-2">
+  🚨 IMPORTANTE
+</h2>
+
+<p class="text-gray-800 text-base font-semibold mb-4">
+  El valor del <span class="text-red-600 font-bold">domicilio</span> depende de la
+  <span class="font-bold">zona de entrega</span> y se confirmará antes de finalizar el pedido.
+</p>
+
+<p class="text-sm text-gray-600">
+  Por favor, verifica tu dirección correctamente.
+</p>
     <button onclick="closeAlertModal()" class="bg-blue-600 text-white px-6 py-2 rounded">
       Aceptar
     </button>
