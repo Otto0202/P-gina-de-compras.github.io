@@ -1,6 +1,7 @@
 let cart = [];
 let orderData = {};
 
+// MODAL AVISO
 function closeAlertModal(){
   document.getElementById("welcomeModal").style.display="none";
 }
@@ -11,7 +12,9 @@ function openImageModal(src){
   imageModal.classList.remove("hidden");
 }
 function closeImageModal(e){
-  if(e.target.id==="imageModal") imageModal.classList.add("hidden");
+  if(e.target.id==="imageModal"){
+    imageModal.classList.add("hidden");
+  }
 }
 function forceCloseImageModal(){
   imageModal.classList.add("hidden");
@@ -19,30 +22,37 @@ function forceCloseImageModal(){
 
 // PRECIOS
 function updatePrice(){
-  priceEmpanada.textContent="$"+Number(empanadaSelect.value).toLocaleString("es-CO");
+  priceEmpanada.textContent =
+    "$" + Number(empanadaSelect.value).toLocaleString("es-CO");
 }
 
 // CARRITO
-function addToCart(name,price,option="Único"){
-  let item = cart.find(p=>p.name===name);
-  if(!item){ item={name,options:{}}; cart.push(item); }
-  if(!item.options[option]) item.options[option]={qty:1,price};
-  else item.options[option].qty++;
+function addToCart(name, price, option="Único"){
+  let item = cart.find(p => p.name === name);
+  if(!item){
+    item = { name, options:{} };
+    cart.push(item);
+  }
+  if(!item.options[option]){
+    item.options[option] = { qty:1, price };
+  }else{
+    item.options[option].qty++;
+  }
   updateCart();
 }
 
 function updateCart(){
-  const cartDiv=document.getElementById("cart");
-  cartDiv.innerHTML="";
-  let total=0;
+  const cartDiv = document.getElementById("cart");
+  cartDiv.innerHTML = "";
+  let total = 0;
 
   cart.forEach(item=>{
-    let d=document.createElement("div");
-    d.innerHTML=`<strong>${item.name}</strong>`;
+    let d = document.createElement("div");
+    d.innerHTML = `<strong>${item.name}</strong>`;
     Object.entries(item.options).forEach(([op,data])=>{
-      let sub=data.qty*data.price;
-      total+=sub;
-      d.innerHTML+=`
+      let sub = data.qty * data.price;
+      total += sub;
+      d.innerHTML += `
         <div class="flex justify-between ml-4">
           <span>${op} x ${data.qty}</span>
           <span>$${sub.toLocaleString("es-CO")}</span>
@@ -51,22 +61,28 @@ function updateCart(){
     cartDiv.appendChild(d);
   });
 
-  cartDiv.innerHTML+=`<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
+  cartDiv.innerHTML +=
+    `<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
 }
 
 // ORDEN
 function openOrderModal(){
-  if(cart.length===0) return alert("Carrito vacío");
+  if(cart.length===0){
+    alert("Carrito vacío");
+    return;
+  }
   orderModal.classList.remove("hidden");
 }
 
 function confirmOrder(){
-  orderData.client=clientName.value;
-  orderData.date=deliveryDate.value;
-  orderData.address=deliveryAddress.value;
+  orderData.client = clientName.value;
+  orderData.date = deliveryDate.value;
+  orderData.address = deliveryAddress.value;
 
-  if(!orderData.client||!orderData.date||!orderData.address)
-    return alert("Completa todos los datos");
+  if(!orderData.client || !orderData.date || !orderData.address){
+    alert("Completa todos los datos");
+    return;
+  }
 
   generatePDF();
   orderModal.classList.add("hidden");
@@ -78,22 +94,22 @@ function closePdfInfoModal(){
   sendToWhatsApp();
 }
 
-// PDF (CORREGIDO)
+// PDF (NO SALE EN BLANCO)
 function generatePDF(){
-  const pdf=document.getElementById("pdfTemplate");
+  const pdf = document.getElementById("pdfTemplate");
 
-  pdfCliente.textContent=orderData.client;
-  pdfDireccion.textContent=orderData.address;
-  pdfFecha.textContent=orderData.date;
+  pdfCliente.textContent = orderData.client;
+  pdfDireccion.textContent = orderData.address;
+  pdfFecha.textContent = orderData.date;
 
-  let total=0;
-  pdfProductos.innerHTML="";
+  let total = 0;
+  pdfProductos.innerHTML = "";
 
   cart.forEach(item=>{
     Object.entries(item.options).forEach(([op,data])=>{
-      let sub=data.qty*data.price;
-      total+=sub;
-      pdfProductos.innerHTML+=`
+      let sub = data.qty * data.price;
+      total += sub;
+      pdfProductos.innerHTML += `
         <tr>
           <td>${item.name} (${op})</td>
           <td align="center">${data.qty}</td>
@@ -102,9 +118,9 @@ function generatePDF(){
     });
   });
 
-  pdfTotal.textContent=total.toLocaleString("es-CO");
+  pdfTotal.textContent = total.toLocaleString("es-CO");
 
-  pdf.style.visibility="visible";
+  pdf.style.visibility = "visible";
 
   setTimeout(()=>{
     html2pdf()
@@ -122,6 +138,9 @@ function generatePDF(){
 
 // WHATSAPP
 function sendToWhatsApp(){
-  let msg=`Hola 👋, adjunto orden de compra en PDF`;
-  window.open(`https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,"_blank");
+  let msg = "Hola 👋, adjunto orden de compra en PDF";
+  window.open(
+    "https://wa.me/573239618378?text="+encodeURIComponent(msg),
+    "_blank"
+  );
 }
