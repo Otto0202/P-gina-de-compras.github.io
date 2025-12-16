@@ -85,20 +85,16 @@ function updateCart() {
         ${
           rule
             ? isWholesale
-              ? `<span class="text-green-700 text-xs animate-pulse">🔥 Precio por mayor aplicado</span>`
+              ? `<span class="text-green-700 text-xs">🔥 Precio por mayor aplicado</span>`
               : `<span class="text-orange-600 text-xs">Faltan ${rule.limit - p.qty} unidades para precio por mayor</span>`
             : ""
         }
         <div class="flex justify-between items-center mt-2">
-          <div>
-            ${isWholesale && rule ? `<span class="line-through text-xs">$${rule.unit}</span><br>` : ""}
-            <span>${p.qty} x $${p.finalPrice.toLocaleString("es-CO")}</span>
-          </div>
+          <span>${p.qty} x $${p.finalPrice.toLocaleString("es-CO")}</span>
           <span class="font-bold">$${subtotal.toLocaleString("es-CO")}</span>
         </div>
         <div class="flex gap-2 mt-2">
           <button onclick="removeOne(${i})" class="bg-red-500 text-white px-3 rounded">-</button>
-          <input type="number" min="1" value="${p.qty}" onchange="updateQuantity(${i},this.value)" class="border w-20 text-center rounded">
           <button onclick="addOne(${i})" class="bg-green-500 text-white px-3 rounded">+</button>
         </div>
       </div>`;
@@ -121,7 +117,7 @@ function updateAbono(p) {
     percent: p,
     abono: total * (p / 100),
     restantePercent: 100 - p,
-    restante: total * (1 - p / 100),
+    restante: total * (1 - p / 100)
   };
 
   document.getElementById("abonoInfo").innerHTML =
