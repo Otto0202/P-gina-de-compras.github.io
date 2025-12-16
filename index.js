@@ -1,161 +1,108 @@
-function closeAlertModal() {
-  document.getElementById("welcomeModal").style.display = "none";
-}
-
 let cart = [];
 let orderData = {};
 
-// ================= IMÁGENES EN PANTALLA COMPLETA =================
-function openImageModal(src) {
-  document.getElementById("modalImage").src = src;
-  document.getElementById("imageModal").classList.remove("hidden");
+function closeAlertModal(){
+  document.getElementById("welcomeModal").style.display="none";
 }
 
-function closeImageModal(e) {
-  if (e.target.id === "imageModal") {
-    document.getElementById("imageModal").classList.add("hidden");
-  }
+// IMÁGENES
+function openImageModal(src){
+  modalImage.src=src;
+  imageModal.classList.remove("hidden");
+}
+function closeImageModal(e){
+  if(e.target.id==="imageModal") imageModal.classList.add("hidden");
+}
+function forceCloseImageModal(){ imageModal.classList.add("hidden"); }
+
+// PRECIOS
+function updatePrice(){
+  priceEmpanada.textContent="$"+Number(empanadaSelect.value).toLocaleString("es-CO");
 }
 
-function forceCloseImageModal() {
-  document.getElementById("imageModal").classList.add("hidden");
-}
-
-// ================= CARRITO ORIGINAL =================
-function addToCart(productName, price, optionName = "Único") {
-  let product = cart.find(item => item.name === productName);
-
-  if (!product) {
-    product = { name: productName, options: {} };
-    cart.push(product);
-  }
-
-  if (!product.options[optionName]) {
-    product.options[optionName] = { qty: 1, price: price };
-  } else {
-    product.options[optionName].qty++;
-  }
-
+// CARRITO
+function addToCart(name,price,option="Único"){
+  let item=cart.find(p=>p.name===name);
+  if(!item){ item={name,options:{}}; cart.push(item); }
+  if(!item.options[option]) item.options[option]={qty:1,price};
+  else item.options[option].qty++;
   updateCart();
 }
 
-function updateCart() {
-  const cartDiv = document.getElementById("cart");
-  cartDiv.innerHTML = "";
+function updateCart(){
+  cartDiv=document.getElementById("cart");
+  cartDiv.innerHTML="";
+  let total=0;
 
-  if (cart.length === 0) {
-    cartDiv.innerHTML = "<p>No hay productos en el carrito.</p>";
-    return;
-  }
-
-  let total = 0;
-
-  cart.forEach((item, index) => {
-    let div = document.createElement("div");
-    div.className = "mb-4 p-2 border-b";
-
-    let title = document.createElement("p");
-    title.className = "font-bold";
-    title.textContent = item.name;
-    div.appendChild(title);
-
-    Object.entries(item.options).forEach(([option, data]) => {
-      const subtotal = data.qty * data.price;
-      total += subtotal;
-
-      div.innerHTML += `
-        <div class="ml-4 flex justify-between">
-          <span>(${option} x ${data.qty})</span>
-          <span>$${subtotal.toLocaleString("es-CO")}</span>
-        </div>
-      `;
+  cart.forEach((item,i)=>{
+    let d=document.createElement("div");
+    d.innerHTML=`<strong>${item.name}</strong>`;
+    Object.entries(item.options).forEach(([op,data])=>{
+      let sub=data.qty*data.price;
+      total+=sub;
+      d.innerHTML+=`
+        <div class="flex justify-between ml-4">
+          <span>${op} x ${data.qty}</span>
+          <span>$${sub.toLocaleString("es-CO")}</span>
+        </div>`;
     });
-
-    cartDiv.appendChild(div);
+    cartDiv.appendChild(d);
   });
 
-  cartDiv.innerHTML += `<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
+  cartDiv.innerHTML+=`<p class="font-bold mt-4">Total: $${total.toLocaleString("es-CO")}</p>`;
 }
 
-// ================= ORDEN / PDF / WHATSAPP =================
-function openOrderModal() {
-  if (cart.length === 0) {
-    alert("Tu carrito está vacío");
-    return;
-  }
-  document.getElementById("orderModal").classList.remove("hidden");
+// ORDEN
+function openOrderModal(){
+  if(cart.length===0) return alert("Carrito vacío");
+  orderModal.classList.remove("hidden");
 }
 
-function confirmOrder() {
-  orderData.client = document.getElementById("clientName").value;
-  orderData.date = document.getElementById("deliveryDate").value;
-  orderData.address = document.getElementById("deliveryAddress").value;
-  orderData.cotizacion = Math.floor(10000 + Math.random() * 90000);
-
-  if (!orderData.client || !orderData.date || !orderData.address) {
-    alert("Completa todos los datos");
-    return;
-  }
+function confirmOrder(){
+  orderData.client=clientName.value;
+  orderData.date=deliveryDate.value;
+  orderData.address=deliveryAddress.value;
+  if(!orderData.client||!orderData.date||!orderData.address)
+    return alert("Completa los datos");
 
   generatePDF();
+  orderModal.classList.add("hidden");
+  pdfInfoModal.classList.remove("hidden");
+}
+
+function closePdfInfoModal(){
+  pdfInfoModal.classList.add("hidden");
   sendToWhatsApp();
 }
 
-function generatePDF() {
-  document.getElementById("pdfCliente").textContent = orderData.client;
-  document.getElementById("pdfDireccion").textContent = orderData.address;
-  document.getElementById("pdfFecha").textContent = orderData.date;
-  document.getElementById("pdfCotizacion").textContent = orderData.cotizacion;
+// PDF
+function generatePDF(){
+  pdfCliente.textContent=orderData.client;
+  pdfDireccion.textContent=orderData.address;
+  pdfFecha.textContent=orderData.date;
 
-  let total = 0;
-  const tbody = document.getElementById("pdfProductos");
-  tbody.innerHTML = "";
+  let total=0;
+  pdfProductos.innerHTML="";
 
-  cart.forEach(item => {
-    Object.entries(item.options).forEach(([op, data]) => {
-      const sub = data.qty * data.price;
-      total += sub;
-
-      tbody.innerHTML += `
+  cart.forEach(item=>{
+    Object.entries(item.options).forEach(([op,data])=>{
+      let sub=data.qty*data.price;
+      total+=sub;
+      pdfProductos.innerHTML+=`
         <tr>
           <td>${item.name} (${op})</td>
-          <td align="center">${data.qty}</td>
-          <td align="right">$${sub.toLocaleString("es-CO")}</td>
-        </tr>
-      `;
+          <td>${data.qty}</td>
+          <td>$${sub.toLocaleString("es-CO")}</td>
+        </tr>`;
     });
   });
 
-  document.getElementById("pdfTotal").textContent = total.toLocaleString("es-CO");
-
-  html2pdf()
-    .set({
-      filename: `Orden_Compra_${orderData.cotizacion}.pdf`,
-      html2canvas: { scale: 2 },
-      jsPDF: { format: "a4", orientation: "portrait" }
-    })
-    .from(document.getElementById("pdfTemplate"))
-    .save();
+  pdfTotal.textContent=total.toLocaleString("es-CO");
+  html2pdf().from(pdfTemplate).save("Orden_Compra.pdf");
 }
 
-function sendToWhatsApp() {
-  let msg = `Hola 👋, adjunto orden de compra en PDF.\n\n`;
-  msg += `Cliente: ${orderData.client}\n`;
-  msg += `Dirección: ${orderData.address}\n`;
-  msg += `Fecha de entrega: ${orderData.date}\n\n`;
-
-  let total = 0;
-  cart.forEach(item => {
-    Object.entries(item.options).forEach(([op, data]) => {
-      total += data.qty * data.price;
-      msg += `- ${item.name} (${op} x ${data.qty})\n`;
-    });
-  });
-
-  msg += `\nTOTAL: $${total.toLocaleString("es-CO")}\n📎 PDF generado`;
-
-  window.open(
-    `https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,
-    "_blank"
-  );
+// WHATSAPP
+function sendToWhatsApp(){
+  let msg=`Hola 👋, adjunto orden de compra en PDF`;
+  window.open(`https://wa.me/573239618378?text=${encodeURIComponent(msg)}`,"_blank");
 }
