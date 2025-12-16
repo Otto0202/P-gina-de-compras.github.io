@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ChiquiDetalles</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
 
-  <!-- HTML A PDF -->
+  <!-- HTML → PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -42,20 +42,15 @@
   </div>
 </div>
 
-<!-- MODAL DATOS -->
+<!-- MODAL DATOS CLIENTE -->
 <div id="orderModal"
   class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-lg w-full max-w-md space-y-4">
     <h2 class="text-xl font-bold text-center">Datos de la Orden</h2>
 
-    <input id="clientName" type="text" placeholder="Nombre del cliente"
-      class="w-full border p-2 rounded">
-
-    <input id="deliveryDate" type="date"
-      class="w-full border p-2 rounded">
-
-    <textarea id="deliveryAddress" placeholder="Dirección de entrega"
-      class="w-full border p-2 rounded"></textarea>
+    <input id="clientName" placeholder="Nombre del cliente" class="w-full border p-2 rounded">
+    <input id="deliveryDate" type="date" class="w-full border p-2 rounded">
+    <textarea id="deliveryAddress" placeholder="Dirección de entrega" class="w-full border p-2 rounded"></textarea>
 
     <button onclick="confirmOrder()"
       class="bg-green-600 text-white px-4 py-2 rounded w-full">
@@ -65,7 +60,7 @@
 </div>
 
 <!-- PLANTILLA PDF OCULTA -->
-<div id="pdfTemplate" style="display:none; font-family: Arial; width:800px; padding:30px">
+<div id="pdfTemplate" style="display:none; font-family:Arial; width:800px; padding:30px">
   <h2 style="text-align:center;">ORDEN COMPRA</h2>
 
   <table width="100%" style="margin-top:20px; font-size:13px">
@@ -107,14 +102,109 @@
   </p>
 </div>
 
-<!-- CONTENIDO ORIGINAL (PRODUCTOS NO MODIFICADOS) -->
 <div class="max-w-6xl mx-auto">
+
   <h1 class="text-4xl font-bold mb-6 text-center">ChiquiDetalles</h1>
+  <h2 class="text-3xl font-bold text-center mb-4">Comidas</h2>
 
-  <!-- AQUÍ SIGUE TODO TU HTML DE PRODUCTOS TAL CUAL LO TENÍAS -->
-  <!-- NO SE MODIFICÓ NADA -->
+  <!-- GRID PRODUCTOS (ORIGINALES) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
-  <div class="max-w-4xl mx-auto mt-10">
+    <!-- Empanadas -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/XgEIdeN.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Empanadas & Arepas rellenas</h2>
+
+      <select id="colorEmpanada" onchange="updatePrice()"
+        class="mt-2 block w-full border p-2 rounded">
+        <option value="2500">Empanada mediana (unidad)</option>
+        <option value="6000">Arepa Rellena</option>
+        <option value="60000">Empanada mediana x30</option>
+        <option value="56000">Arepa rellena x10</option>
+      </select>
+
+      <p id="priceEmpanada" class="text-lg font-bold mt-2">$2.500</p>
+
+      <button onclick="addToCart(
+        'Empanadas & Arepas',
+        parseInt(colorEmpanada.value),
+        colorEmpanada.options[colorEmpanada.selectedIndex].text)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+    <!-- Buñuelos x20 -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/YVId4rm.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Buñuelos x20</h2>
+      <p class="text-lg font-bold mt-2">$5.000</p>
+      <button onclick="addToCart('Buñuelos x20', 5000)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+    <!-- Buñuelos combo -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/3uq6mlL.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Buñuelos + Natilla + Mermelada</h2>
+      <p class="text-lg font-bold mt-2">$4.500</p>
+      <button onclick="addToCart('Buñuelos + Natilla + Mermelada', 4500)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+    <!-- Arroz -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/4NF7TOu.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Arroz con leche</h2>
+      <p class="text-lg font-bold mt-2">$4.500</p>
+      <button onclick="addToCart('Arroz con leche', 4500)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+    <!-- Gelatina -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/owsoe8H.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Gelatina Mosaico</h2>
+      <p class="text-lg font-bold mt-2">$4.500</p>
+      <button onclick="addToCart('Gelatina Mosaico', 4500)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+    <!-- Sandwich -->
+    <div class="bg-white p-4 rounded shadow">
+      <img src="https://imgur.com/BOyqyCZ.jpg" class="product-img">
+      <h2 class="text-xl font-semibold mt-2">Sándwich Especial + Papas</h2>
+
+      <select id="colorSandwich" onchange="updatePriceSandwich()"
+        class="mt-2 block w-full border p-2 rounded">
+        <option value="15000">Sándwich Solo</option>
+        <option value="20000">Sándwich + Papas</option>
+        <option value="35000">Combo Doble</option>
+      </select>
+
+      <p id="priceSandwich" class="text-lg font-bold mt-2">$15.000</p>
+
+      <button onclick="addToCart(
+        'Sándwich Especial',
+        parseInt(colorSandwich.value),
+        colorSandwich.options[colorSandwich.selectedIndex].text)"
+        class="bg-green-500 text-white px-4 py-2 mt-3 rounded w-full">
+        Agregar
+      </button>
+    </div>
+
+  </div>
+
+  <!-- CARRITO -->
+  <div class="max-w-4xl mx-auto">
     <h1 class="text-3xl font-bold mb-4 text-center">Carrito de Compras</h1>
 
     <div class="bg-white p-4 rounded shadow">
@@ -126,6 +216,7 @@
       </button>
     </div>
   </div>
+
 </div>
 
 <script src="index.js"></script>
